@@ -1,7 +1,8 @@
-package token
+package auth
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
+	"Server/tools"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -14,14 +15,17 @@ type token struct {
 // Create
 /// id 签发标识,userId
 /// name 签发人,userName
-func Create(id int64, name string) (string, error) {
+func Create(id int64, name string) string {
 	claims := &token{
 		Id:   id,
 		Name: name,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
-	str, err := token.SignedString(vars2.KeyToken)
-	return str, err
+	str, err := token.SignedString(vars.KeyToken)
+	if err != nil {
+		tools.Err("Create", "创建token失败")
+	}
+	return str
 }
 
 // Parse
@@ -29,7 +33,7 @@ func Create(id int64, name string) (string, error) {
 func Parse(str string) (claims jwt.Claims) {
 	var token *jwt.Token
 	token, _ = jwt.Parse(str, func(token *jwt.Token) (interface{}, error) {
-		return vars2.KeyToken, nil
+		return vars.KeyToken, nil
 	})
 	claims = token.Claims
 	return

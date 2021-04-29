@@ -1,9 +1,9 @@
 package user
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
 	"Server/models"
-	"Server/tools/token"
+	"Server/services/user/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
@@ -11,13 +11,13 @@ import (
 func Me(c *gin.Context) {
 
 	t := c.GetHeader("Authorization")
-	parse := token.Parse(t)
+	parse := auth.Parse(t)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
 	for rows.Next() {
 		var user models.User
-		_ = vars2.DB0.ScanRows(rows, &user)
+		_ = vars.DB0.ScanRows(rows, &user)
 
 		c.SecureJSON(200, gin.H{
 			"name":          user.Name,

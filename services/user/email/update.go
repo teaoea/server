@@ -1,10 +1,10 @@
 package email
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
 	"Server/models"
+	"Server/services/user/auth"
 	"Server/tools"
-	"Server/tools/token"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -17,10 +17,10 @@ type emailUpdate struct {
 }
 
 func Update(c *gin.Context) {
-	t := c.GetHeader("Authorization")
-	parse := token.Parse(t)
+	token := c.GetHeader("Authorization")
+	parse := auth.Parse(token)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
 
 	for rows.Next() {
 		var (
@@ -28,10 +28,10 @@ func Update(c *gin.Context) {
 			e    emailUpdate
 		)
 
-		_ = vars2.DB0.ScanRows(rows, &user)
+		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.BindJSON(&e)
 
-		affected := vars2.DB0.Table("user").Where(&models.User{Email: e.Email}, "email").Find(&user).RowsAffected
+		affected := vars.DB0.Table("user").Where(&models.User{Email: e.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
 			c.SecureJSON(http.StatusUnauthorized, gin.H{
 				"message": fmt.Sprintf("邮箱'%s'已注册", e.Email),
@@ -49,11 +49,11 @@ func Update(c *gin.Context) {
 		}
 
 		// 修改邮箱和邮箱状态
-		vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email", e.Email)
-		vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email_active", false)
+		vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email", e.Email)
+		vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email_active", false)
 		// 如果手机号未激活,修改账户状态为未激活
 		if !user.NumberActive {
-			vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
+			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
 		}
 
 		c.SecureJSON(http.StatusOK, nil)

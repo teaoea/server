@@ -1,7 +1,7 @@
 package tools
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -14,7 +14,7 @@ func Server() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		start := time.Now()
 		ctx.Next()
-		_, _ = vars2.MongoHttp.InsertOne(context.TODO(), bson.D{
+		_, _ = vars.MongoHttp.InsertOne(context.TODO(), bson.D{
 			bson.E{Key: "_id", Value: NewId()},
 			bson.E{Key: "Method", Value: ctx.Request.Method},                     // 请求方式
 			bson.E{Key: "Path", Value: ctx.Request.URL.Path},                     // 请求路径
@@ -24,4 +24,12 @@ func Server() gin.HandlerFunc {
 			bson.E{Key: "IPv4", Value: ctx.ClientIP()},                           // 客户端ip
 		})
 	}
+}
+
+func Err(position, reason string) {
+	_, _ = vars.MongoError.InsertOne(context.TODO(), bson.D{
+		bson.E{Key: "_id", Value: NewId()},
+		bson.E{Key: "position", Value: position},
+		bson.E{Key: "reason", Value: reason},
+	})
 }

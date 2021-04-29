@@ -3,10 +3,10 @@ package services
 import (
 	"Server/services/article"
 	"Server/services/user"
+	"Server/services/user/auth"
 	"Server/services/user/email"
 	"Server/services/user/oauth"
 	"Server/tools"
-	"Server/tools/auth"
 	"github.com/gin-gonic/gin"
 )
 

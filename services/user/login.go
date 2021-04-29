@@ -1,9 +1,9 @@
 package user
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
 	"Server/models"
-	"Server/tools/token"
+	"Server/services/user/auth"
 	"context"
 	"database/sql"
 	"fmt"
@@ -19,7 +19,7 @@ func Login(c *gin.Context) {
 	}
 	var user models.User
 	_ = c.ShouldBindJSON(&login)
-	nameCheck := vars2.DB0.Table("user").Where("name = @name OR email = @name OR number= @name", sql.Named("name", login.Name)).Find(&user).RowsAffected
+	nameCheck := vars.DB0.Table("user").Where("name = @name OR email = @name OR number= @name", sql.Named("name", login.Name)).Find(&user).RowsAffected
 
 	if nameCheck == 0 {
 		c.SecureJSON(404, gin.H{
@@ -28,23 +28,23 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("name = @name OR email = @name OR number= @name", sql.Named("name", login.Name)).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("name = @name OR email = @name OR number= @name", sql.Named("name", login.Name)).Rows()
 
 	for rows.Next() {
 		var user models.User
-		_ = vars2.DB0.ScanRows(rows, &user)
+		_ = vars.DB0.ScanRows(rows, &user)
 		/*
 			encodePWD 获取数据库中已加密的密码
 			decodePWD 校验密码是否正确
 		*/
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
 		if decodePWD == nil {
-			t, _ := token.Create(user.Id, user.Name)
+			value := auth.Create(user.Id, user.Name)
 
-			vars2.RedisToken.Set(context.Background(), user.Name, t, time.Hour*168)
+			vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
 			// 返回token
 			c.SecureJSON(200, gin.H{
-				"message": t,
+				"message": value,
 			})
 			return
 		}

@@ -1,9 +1,9 @@
 package article
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
 	"Server/models"
-	"Server/tools/token"
+	"Server/services/user/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
@@ -14,14 +14,14 @@ type uploadedFile struct {
 
 func UploadedFile(c *gin.Context) {
 	u := uploadedFile{}
-	t := c.GetHeader("Authorization")
-	parse := token.Parse(t)
+	token := c.GetHeader("Authorization")
+	parse := auth.Parse(token)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
 	for rows.Next() {
 		var user models.User
-		_ = vars2.DB0.ScanRows(rows, &user)
+		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&u)
 
 		img := models.UploadedImg{
@@ -29,7 +29,7 @@ func UploadedFile(c *gin.Context) {
 			Img: u.Img,
 		}
 
-		vars2.DB0.Table("uploaded_img").Create(&img)
+		vars.DB0.Table("uploaded_img").Create(&img)
 
 		c.JSON(200, gin.H{
 			"message": "图片上传成功",

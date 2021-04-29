@@ -1,9 +1,9 @@
 package user
 
 import (
-	vars2 "Server/config/vars"
+	"Server/config/vars"
 	"Server/models"
-	"Server/tools/token"
+	"Server/services/user/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -19,14 +19,14 @@ func ChangePassword(c *gin.Context) {
 	pwd := passwordUpdate{}
 	_ = c.ShouldBindJSON(&pwd)
 
-	t := c.GetHeader("Authorization")
-	parse := token.Parse(t)
+	token := c.GetHeader("Authorization")
+	parse := auth.Parse(token)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
 
 	for rows.Next() {
 		var user models.User
-		_ = vars2.DB0.ScanRows(rows, &user)
+		_ = vars.DB0.ScanRows(rows, &user)
 
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pwd.Old))
 
@@ -45,7 +45,7 @@ func ChangePassword(c *gin.Context) {
 		default:
 			hash, _ := bcrypt.GenerateFromPassword([]byte(pwd.Password2), bcrypt.DefaultCost) //加密处理
 			encodePWD := string(hash)
-			vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("password", encodePWD)
+			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("password", encodePWD)
 			c.SecureJSON(200, gin.H{
 				"message": "密码已修改完成",
 			})
