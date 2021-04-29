@@ -1,9 +1,9 @@
 package email
 
 import (
+	vars2 "Server/config/vars"
 	"Server/models"
 	"Server/tools/token"
-	"Server/vars"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -20,14 +20,14 @@ func Active(c *gin.Context) {
 	t := c.GetHeader("Authorization")
 	parse := token.Parse(t)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
 	for rows.Next() {
 		var user models.User
-		_ = vars.PDB0.ScanRows(rows, &user)
+		_ = vars2.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&active)
 
-		value, _ := vars.RDBCODE.Get(context.Background(), user.Email).Result()
+		value, _ := vars2.RedisCode.Get(context.Background(), user.Email).Result()
 
 		if active.Code != value {
 			c.SecureJSON(403, gin.H{
@@ -36,8 +36,8 @@ func Active(c *gin.Context) {
 			return
 		}
 
-		vars.PDB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("email_active", true) // 邮箱激活
-		vars.PDB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("is_active", true)    // 账户激活
+		vars2.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("email_active", true) // 邮箱激活
+		vars2.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("is_active", true)    // 账户激活
 		c.SecureJSON(200, gin.H{
 			"message": fmt.Sprintf("电子邮件地址%s已激活", user.Email),
 		})

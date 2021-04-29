@@ -1,10 +1,10 @@
 package article
 
 import (
+	vars2 "Server/config/vars"
 	"Server/models"
 	"Server/tools"
 	"Server/tools/token"
-	"Server/vars"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -19,12 +19,12 @@ func WriteArticle(c *gin.Context) {
 	t := c.GetHeader("Authorization")
 	parse := token.Parse(t)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
 	for rows.Next() {
 		var user models.User
 		var article models.Article
-		_ = vars.PDB0.ScanRows(rows, &user)
+		_ = vars2.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&article)
 		if !user.IsActive {
 			c.SecureJSON(http.StatusUnauthorized, gin.H{
@@ -40,7 +40,7 @@ func WriteArticle(c *gin.Context) {
 		}
 
 		var ca models.Category
-		caCheck := vars.PDB0.Table("category").Where(&models.Category{Name: article.Category}, "name").Find(&ca).RowsAffected
+		caCheck := vars2.DB0.Table("category").Where(&models.Category{Name: article.Category}, "name").Find(&ca).RowsAffected
 		if caCheck == 0 {
 			c.SecureJSON(http.StatusNotFound, gin.H{
 				"message": fmt.Sprintf("类别'%s'不存在", article.Category),
@@ -50,7 +50,7 @@ func WriteArticle(c *gin.Context) {
 		body := tools.WriteMd(article.Body)
 		switch {
 		case !article.Status:
-			_, _ = vars.MDBDRAFT.InsertOne(context.Background(), bson.D{
+			_, _ = vars2.MongoDraft.InsertOne(context.Background(), bson.D{
 				bson.E{Key: "_id", Value: tools.NewId()},
 				bson.E{Key: "title", Value: article.Title},
 				bson.E{Key: "body", Value: body},
@@ -69,7 +69,7 @@ func WriteArticle(c *gin.Context) {
 			})
 			return
 		default:
-			_, _ = vars.MDBPUBLISH.InsertOne(context.Background(), bson.D{
+			_, _ = vars2.MongoPublish.InsertOne(context.Background(), bson.D{
 				bson.E{Key: "_id", Value: tools.NewId()},
 				bson.E{Key: "title", Value: article.Title},
 				bson.E{Key: "body", Value: body},

@@ -1,9 +1,9 @@
 package auth
 
 import (
+	vars2 "Server/config/vars"
 	"Server/models"
 	"Server/tools/token"
-	"Server/vars"
 	"context"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -15,8 +15,8 @@ func ProxyAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		ip := c.ClientIP()
-		index := sort.SearchStrings(vars.PROXYADDR, ip)
-		if ip != vars.PROXYADDR[index] {
+		index := sort.SearchStrings(vars2.ProxyAddr, ip)
+		if ip != vars2.ProxyAddr[index] {
 			c.JSON(401, nil)
 		} else {
 			c.Next()
@@ -32,14 +32,14 @@ func LoginAuth() gin.HandlerFunc {
 		parse := token.Parse(t)
 		id := parse.(jwt.MapClaims)["id"]
 
-		rows, _ := vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+		rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
 		for rows.Next() {
 			var user models.User
 
-			_ = vars.PDB0.ScanRows(rows, &user)
+			_ = vars2.DB0.ScanRows(rows, &user)
 
-			result, _ := vars.RDBTOKEN.Get(context.Background(), user.Name).Result()
+			result, _ := vars2.RedisToken.Get(context.Background(), user.Name).Result()
 
 			if result != t {
 				c.JSON(403, gin.H{

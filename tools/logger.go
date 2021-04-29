@@ -1,8 +1,7 @@
-package log
+package tools
 
 import (
-	"Server/tools"
-	"Server/vars"
+	vars2 "Server/config/vars"
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,8 +14,8 @@ func Server() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		start := time.Now()
 		ctx.Next()
-		_, _ = vars.MDBHTTP.InsertOne(context.TODO(), bson.D{
-			bson.E{Key: "_id", Value: tools.NewId()},
+		_, _ = vars2.MongoHttp.InsertOne(context.TODO(), bson.D{
+			bson.E{Key: "_id", Value: NewId()},
 			bson.E{Key: "Method", Value: ctx.Request.Method},                     // 请求方式
 			bson.E{Key: "Path", Value: ctx.Request.URL.Path},                     // 请求路径
 			bson.E{Key: "Delay", Value: time.Since(start) / 1e6},                 // 延迟

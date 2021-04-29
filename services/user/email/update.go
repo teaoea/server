@@ -1,10 +1,10 @@
 package email
 
 import (
+	vars2 "Server/config/vars"
 	"Server/models"
 	"Server/tools"
 	"Server/tools/token"
-	"Server/vars"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ func Update(c *gin.Context) {
 	t := c.GetHeader("Authorization")
 	parse := token.Parse(t)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.PDB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
+	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
 
 	for rows.Next() {
 		var (
@@ -28,10 +28,10 @@ func Update(c *gin.Context) {
 			e    emailUpdate
 		)
 
-		_ = vars.PDB0.ScanRows(rows, &user)
+		_ = vars2.DB0.ScanRows(rows, &user)
 		_ = c.BindJSON(&e)
 
-		affected := vars.PDB0.Table("user").Where(&models.User{Email: e.Email}, "email").Find(&user).RowsAffected
+		affected := vars2.DB0.Table("user").Where(&models.User{Email: e.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
 			c.SecureJSON(http.StatusUnauthorized, gin.H{
 				"message": fmt.Sprintf("邮箱'%s'已注册", e.Email),
@@ -49,11 +49,11 @@ func Update(c *gin.Context) {
 		}
 
 		// 修改邮箱和邮箱状态
-		vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email", e.Email)
-		vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email_active", false)
+		vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email", e.Email)
+		vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email_active", false)
 		// 如果手机号未激活,修改账户状态为未激活
 		if !user.NumberActive {
-			vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
+			vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
 		}
 
 		c.SecureJSON(http.StatusOK, nil)

@@ -1,10 +1,10 @@
 package email
 
 import (
+	vars2 "Server/config/vars"
 	"Server/models"
 	"Server/tools"
 	"Server/tools/token"
-	"Server/vars"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
@@ -18,13 +18,13 @@ func SendCode(c *gin.Context) {
 	t := c.GetHeader("Authorization")
 	parse := token.Parse(t)
 	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.PDB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	rows, _ := vars2.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
 	for rows.Next() {
 		var user models.User
-		_ = vars.PDB0.ScanRows(rows, &user)
+		_ = vars2.DB0.ScanRows(rows, &user)
 
-		emailCheck := vars.PDB0.Table("user").Where(&models.User{Email: user.Email}, "email").Find(&user).RowsAffected
+		emailCheck := vars2.DB0.Table("user").Where(&models.User{Email: user.Email}, "email").Find(&user).RowsAffected
 		switch {
 		case emailCheck == 1:
 			to := user.Email        //收件人邮箱
@@ -38,7 +38,7 @@ func SendCode(c *gin.Context) {
 				fmt.Sprintf("<h3>有人使用此%s电子邮件地址,在<a href=%s>teaoea</a>注册了账户,如果你未注册账户,请忽视此邮件.</h3>", user.Email, a),
 			) // 邮件正文,可以使用html语法,验证码使用<strong>标签,无障碍服务
 			_ = tools.SendMail(strings.Fields(to), subject, html, "")
-			vars.RDBCODE.Set(context.Background(), user.Email, code, time.Second*300)
+			vars2.RedisCode.Set(context.Background(), user.Email, code, time.Second*300)
 			c.SecureJSON(200, gin.H{
 				"message": fmt.Sprintf("验证码已发送到电子邮件地址%s", user.Email),
 			})

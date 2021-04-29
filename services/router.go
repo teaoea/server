@@ -1,18 +1,18 @@
 package services
 
 import (
-	log2 "Server/log"
 	"Server/services/article"
 	"Server/services/user"
 	"Server/services/user/email"
 	"Server/services/user/oauth"
+	"Server/tools"
 	"Server/tools/auth"
 	"github.com/gin-gonic/gin"
 )
 
 func Router() *gin.Engine {
 	router := gin.New()
-	router.Use(log2.Server())
+	router.Use(tools.Server())
 	v1 := router.Group("/v1")
 	v1.GET("/category", article.CategoryList) // 分类列表
 	{

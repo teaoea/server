@@ -1,7 +1,7 @@
 package token
 
 import (
-	"Server/vars"
+	vars2 "Server/config/vars"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -20,7 +20,7 @@ func Create(id int64, name string) (string, error) {
 		Name: name,
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
-	str, err := token.SignedString(vars.KEYTOKEN)
+	str, err := token.SignedString(vars2.KeyToken)
 	return str, err
 }
 
@@ -29,7 +29,7 @@ func Create(id int64, name string) (string, error) {
 func Parse(str string) (claims jwt.Claims) {
 	var token *jwt.Token
 	token, _ = jwt.Parse(str, func(token *jwt.Token) (interface{}, error) {
-		return vars.KEYTOKEN, nil
+		return vars2.KeyToken, nil
 	})
 	claims = token.Claims
 	return

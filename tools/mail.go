@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"Server/vars"
+	vars2 "Server/config/vars"
 	"context"
 	"fmt"
 	"github.com/jordan-wright/email"
@@ -21,12 +21,12 @@ func SendMail(to []string, subject string, body []byte, filename string) *email.
 
 	mail := email.NewEmail()
 	mail.To = to
-	mail.From = vars.MailForm
+	mail.From = vars2.MailForm
 	mail.Subject = subject
 	mail.HTML = body
 	_, _ = mail.AttachFile(filename)
-	auth := smtp.PlainAuth("", vars.MailUser, vars.MailPassword, vars.MailSmtp)
-	pool, _ := email.NewPool(fmt.Sprintf("%s:%s", vars.MailSmtp, vars.MailPort), 4, auth)
+	auth := smtp.PlainAuth("", vars2.MailUser, vars2.MailPassword, vars2.MailSmtp)
+	pool, _ := email.NewPool(fmt.Sprintf("%s:%s", vars2.MailSmtp, vars2.MailPort), 4, auth)
 
 	return pool
 }
@@ -45,6 +45,6 @@ func SuffixCheck(email string) bool {
 	filter := bson.D{
 		bson.E{Key: "suffix", Value: suf},
 	}
-	val := vars.MDBSUFFIXE.FindOne(context.TODO(), filter).Decode(&suffix)
+	val := vars2.MongoSuffix.FindOne(context.TODO(), filter).Decode(&suffix)
 	return val != mongo.ErrNoDocuments
 }

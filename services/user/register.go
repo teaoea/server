@@ -1,9 +1,9 @@
 package user
 
 import (
+	vars2 "Server/config/vars"
 	"Server/models"
 	"Server/tools"
-	"Server/vars"
 	"fmt"
 	"strings"
 	"time"
@@ -20,11 +20,11 @@ func Register(c *gin.Context) {
 	var user models.User
 	_ = c.ShouldBindJSON(&register)
 
-	nameCheck := vars.PDB0.Table("user").Where(&models.User{Name: register.Name}, "name").Find(&user).RowsAffected
+	nameCheck := vars2.DB0.Table("user").Where(&models.User{Name: register.Name}, "name").Find(&user).RowsAffected
 
-	emailCheck := vars.PDB0.Table("user").Where(&models.User{Email: register.Email}, "email").Find(&user).RowsAffected
+	emailCheck := vars2.DB0.Table("user").Where(&models.User{Email: register.Email}, "email").Find(&user).RowsAffected
 
-	numberCheck := vars.PDB0.Table("user").Where(&models.User{Number: register.Number}, "number").Find(&user).RowsAffected
+	numberCheck := vars2.DB0.Table("user").Where(&models.User{Number: register.Number}, "number").Find(&user).RowsAffected
 
 	switch {
 
@@ -79,7 +79,7 @@ func Register(c *gin.Context) {
 			CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 
-		vars.PDB0.Table("user").Create(&user)
+		vars2.DB0.Table("user").Create(&user)
 		c.SecureJSON(200, gin.H{
 			"message": fmt.Sprintf("%s已完成注册", register.Name),
 		})
