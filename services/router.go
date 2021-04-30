@@ -2,6 +2,7 @@ package services
 
 import (
 	"Server/services/article"
+	"Server/services/permission"
 	"Server/services/user"
 	"Server/services/user/auth"
 	"Server/services/user/email"
@@ -42,6 +43,11 @@ func Router() *gin.Engine {
 		upload := v1.Group("/uploaded", auth.LoginAuth())
 		{
 			upload.POST("/img", article.UploadedFile) // 上传图片
+		}
+
+		_permission := v1.Group("/permission", auth.ProxyAuth(), auth.LoginAuth())
+		{
+			_permission.POST("/article", permission.HideArticle) // 隐藏文章
 		}
 	}
 	return router
