@@ -13,7 +13,6 @@ type Config struct {
 	Mongo      Mongo      `yaml:"mongo"`
 	Redis      Redis      `yaml:"redis"`
 	Key        Key        `yaml:"key"`
-	Proxy      Proxy      `yaml:"proxy"`
 	MobTech    MobTech    `yaml:"mob_tech"`
 }
 
@@ -60,9 +59,6 @@ type Key struct {
 	PublicKey  string `yaml:"publicKey"`
 }
 
-type Proxy struct {
-	Addr []string `yaml:"addr"`
-}
 type MobTech struct {
 	Key    string `yaml:"key"`
 	Secret string `yaml:"secret"`
