@@ -26,11 +26,12 @@ func ProxyAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		ip := c.ClientIP()
-		if !ipCheck(ip) {
+		switch {
+		case !ipCheck(ip):
 			c.JSON(403, gin.H{
 				"message": fmt.Sprintf("ip地址%s,无权限访问", ip),
 			})
-		} else {
+		default:
 			c.Next()
 		}
 	}
