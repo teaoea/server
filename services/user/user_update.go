@@ -24,13 +24,12 @@ func UpdateUser(c *gin.Context) {
 
 		case u.Avatar != "":
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("avatar", u.Avatar)
+			fallthrough
 
 		case u.Gender != "":
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("gender", u.Gender)
 
-		case u.Introduction != "":
-			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("introduction", u.Introduction)
+			c.SecureJSON(200, nil)
 		}
-		c.SecureJSON(200, nil)
 	}
 }

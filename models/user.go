@@ -11,7 +11,6 @@ type User struct {
 	NumberActive bool   `json:"number_active" gorm:"number_active"`
 	Avatar       string `json:"avatar" gorm:"avatar"`
 	Gender       string `json:"gender" gorm:"gender"`
-	Introduction string `json:"introduction" gorm:"introduction"`
 	CreatedAt    string `json:"created_at" gorm:"created_at"`
 	IsActive     bool   `json:"is_active" gorm:"is_active"`
 	IsAdmin      bool   `json:"is_admin" gorm:"is_admin"`

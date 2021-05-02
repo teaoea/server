@@ -28,7 +28,6 @@ func Me(c *gin.Context) {
 			"number_active": user.NumberActive,
 			"avatar":        user.Avatar,
 			"gender":        user.Gender,
-			"introduction":  user.Introduction,
 		})
 	}
 }
