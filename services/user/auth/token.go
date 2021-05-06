@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"Server/config/vars"
-	"Server/tools"
 	"github.com/dgrijalva/jwt-go"
+	"server/config/vars"
+	"server/tools"
 )
 
 type token struct {

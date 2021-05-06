@@ -1,13 +1,13 @@
 package email
 
 import (
-	"Server/config/vars"
-	"Server/models"
-	"Server/services/user/auth"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"server/config/vars"
+	"server/models"
+	"server/services/user/auth"
 )
 
 type active struct {

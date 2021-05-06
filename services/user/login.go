@@ -1,12 +1,12 @@
 package user
 
 import (
-	"Server/config/vars"
-	"Server/models"
-	"Server/services/user/auth"
 	"context"
 	"database/sql"
 	"fmt"
+	"server/config/vars"
+	"server/models"
+	"server/services/user/auth"
 	"time"
 
 	"github.com/gin-gonic/gin"

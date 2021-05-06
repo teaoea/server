@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"Server/config"
+	"server/config"
 	"sync"
 	"time"
 )

@@ -1,10 +1,10 @@
 package user
 
 import (
-	"Server/config/vars"
-	"Server/models"
-	"Server/tools"
 	"fmt"
+	"server/config/vars"
+	"server/models"
+	"server/tools"
 	"strings"
 	"time"
 

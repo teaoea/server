@@ -1,6 +1,6 @@
 package vars
 
-import "Server/config"
+import "server/config"
 
 var (
 	conf config.Config

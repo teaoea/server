@@ -1,12 +1,12 @@
 package user
 
 import (
-	"Server/config/vars"
-	"Server/models"
-	"Server/services/user/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"server/config/vars"
+	"server/models"
+	"server/services/user/auth"
 )
 
 type passwordUpdate struct {

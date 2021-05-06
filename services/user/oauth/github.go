@@ -1,11 +1,11 @@
 package oauth
 
 import (
-	"Server/config/vars"
-	"Server/models"
-	"Server/services/user/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"server/config/vars"
+	"server/models"
+	"server/services/user/auth"
 )
 
 type github struct {

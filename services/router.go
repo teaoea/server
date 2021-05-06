@@ -1,14 +1,14 @@
 package services
 
 import (
-	"Server/services/article"
-	"Server/services/permission"
-	"Server/services/user"
-	"Server/services/user/auth"
-	"Server/services/user/email"
-	"Server/services/user/oauth"
-	"Server/tools"
 	"github.com/gin-gonic/gin"
+	"server/services/article"
+	"server/services/permission"
+	"server/services/user"
+	"server/services/user/auth"
+	"server/services/user/email"
+	"server/services/user/oauth"
+	"server/tools"
 )
 
 func Router() *gin.Engine {

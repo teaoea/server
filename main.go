@@ -1,13 +1,13 @@
 package main
 
 import (
-	"Server/services"
 	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"server/services"
 	"time"
 )
 

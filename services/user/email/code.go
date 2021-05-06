@@ -1,14 +1,14 @@
 package email
 
 import (
-	"Server/config/vars"
-	"Server/models"
-	"Server/services/user/auth"
-	"Server/tools"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"server/config/vars"
+	"server/models"
+	"server/services/user/auth"
+	"server/tools"
 	"strings"
 	"time"
 )

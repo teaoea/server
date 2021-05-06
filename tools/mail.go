@@ -1,13 +1,13 @@
 package tools
 
 import (
-	"Server/config/vars"
 	"context"
 	"fmt"
 	"github.com/jordan-wright/email"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"net/smtp"
+	"server/config/vars"
 	"strings"
 )
 

@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"Server/config/vars"
-	"Server/models"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"server/config/vars"
+	"server/models"
 )
 
 func ipCheck(ip string) bool {
