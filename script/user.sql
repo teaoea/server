@@ -1,4 +1,4 @@
-create table "user"
+create table public."user"
 (
     id            bigint                not null
         constraint user_pk
@@ -15,23 +15,23 @@ create table "user"
     is_admin      boolean default false,
     avatar        varchar,
     gender        varchar,
-    introduction  text,
-    is_hide       boolean default false not null
+    is_hide       boolean default false not null,
+    country       varchar
 );
 
-alter table "user"
+alter table public."user"
     owner to postgres;
 
 create unique index user_email_uindex
-    on "user" (email);
+    on public."user" (email);
 
 create unique index user_id_uindex
-    on "user" (id);
+    on public."user" (id);
 
 create unique index user_name_uindex
-    on "user" (name);
+    on public."user" (name);
 
 create unique index user_number_uindex
-    on "user" (number);
+    on public."user" (number);
 
 
