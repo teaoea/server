@@ -65,7 +65,7 @@ type MobTech struct {
 }
 
 func (config *Config) Yaml() *Config {
-	filename, _ := os.ReadFile("./config/config.yaml")
+	filename, _ := os.ReadFile("./config.yaml")
 
 	_ = yaml.Unmarshal(filename, config)
 
