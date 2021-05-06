@@ -18,7 +18,6 @@ func PostgresqlClient(user, password, host, port, name string) *gorm.DB {
 		host, user, password, name, port)
 	pgc, _ := gorm.Open(postgres.New(postgres.Config{
 		DSN: dsn,
-		//PreferSimpleProtocol: true,
 	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
@@ -38,6 +37,10 @@ func RedisClient(host, port, password string, DB int) *redis.Client {
 		Password: password,
 		DB:       DB,
 	})
+	_, err := rdb.Ping(context.TODO()).Result()
+	if err != nil {
+		panic("redis连接失败,检查config.yaml配置文件设置,节点mongo是否设置正确")
+	}
 	return rdb
 }
 
@@ -50,6 +53,10 @@ func MongoClient(user, password, host, port, database, collection string) *mongo
 		ApplyURI(uri).
 		SetMaxPoolSize(100).
 		SetMinPoolSize(5))
+	err := mgc.Ping(ctx, nil)
+	if err != nil {
+		panic("mongo连接失败,检查config.yaml配置文件是否设置正确,节点redis是否设置正确")
+	}
 	coll := mgc.Database(database).Collection(collection)
 	return coll
 }
