@@ -1,20 +1,20 @@
 package models
 
 type User struct {
-	Id           int64  `json:"id" gorm:"id"`
-	Name         string `json:"name" gorm:"name"`
-	Password     string `json:"password" gorm:"password"`
-	Email        string `json:"email" gorm:"email"`
-	EmailActive  bool   `json:"email_active" gorm:"email_active"`
-	Country      string `json:"country" gorm:"country"`
-	Number       string `json:"number" gorm:"number"`
-	NumberActive bool   `json:"number_active" gorm:"number_active"`
-	Avatar       string `json:"avatar" gorm:"avatar"`
-	Gender       string `json:"gender" gorm:"gender"`
-	CreatedAt    string `json:"created_at" gorm:"created_at"`
-	IsActive     bool   `json:"is_active" gorm:"is_active"`
-	IsAdmin      bool   `json:"is_admin" gorm:"is_admin"`
-	IsHide       bool   `json:"is_hide" gorm:"is_hide"`
+	Id           int64  `json:"id"`
+	Name         string `json:"name" `
+	Password     string `json:"password"`
+	Email        string `json:"email" `
+	EmailActive  bool   `json:"email_active" `
+	Country      string `json:"country" `
+	Number       string `json:"number"`
+	NumberActive bool   `json:"number_active" `
+	Avatar       string `json:"avatar" `
+	Gender       string `json:"gender" `
+	CreatedAt    string `json:"created_at" `
+	IsActive     bool   `json:"is_active" `
+	IsAdmin      bool   `json:"is_admin" `
+	IsHide       bool   `json:"is_hide"`
 }
 
 func (User) TableName() string {
