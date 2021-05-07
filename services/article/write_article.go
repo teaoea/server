@@ -1,11 +1,9 @@
 package article
 
 import (
-	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"server/config/vars"
 	"server/models"
@@ -23,7 +21,10 @@ func WriteArticle(c *gin.Context) {
 
 	for rows.Next() {
 		var user models.User
-		var article models.Article
+		var article struct {
+			models.Article
+			Status bool `json:"status"` // 文章状态 ture: 完成 false: 草稿
+		}
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&article)
 		if !user.IsActive {
@@ -50,39 +51,38 @@ func WriteArticle(c *gin.Context) {
 		body := tools.WriteMd(article.Body)
 		switch {
 		case !article.Status:
-			_, _ = vars.MongoDraft.InsertOne(context.Background(), bson.D{
-				bson.E{Key: "_id", Value: tools.NewId()},
-				bson.E{Key: "title", Value: article.Title},
-				bson.E{Key: "body", Value: body},
-				bson.E{Key: "img", Value: article.Img},
-				bson.E{Key: "category", Value: article.Category},
-				bson.E{Key: "show", Value: article.Show},
-				bson.E{Key: "view", Value: 0},
-				bson.E{Key: "sha256", Value: tools.Checksum(article.Body)},
-				bson.E{Key: "author", Value: user.Name},
-				bson.E{Key: "license", Value: article.License},
-				bson.E{Key: "is_hide", Value: false},
-				bson.E{Key: "created_at", Value: time.Now().Format("2006-01-02 15:04:05")},
-			})
+			a := models.Article{
+				Id:        tools.NewId(),
+				Title:     article.Title,
+				Body:      body,
+				Img:       article.Img,
+				Category:  article.Category,
+				Show:      article.Show,
+				View:      0,
+				SHA256:    tools.Checksum(article.Body),
+				Author:    user.Name,
+				License:   article.License,
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+			}
+			vars.DB0.Table("draft").Create(&a)
 			c.SecureJSON(http.StatusOK, gin.H{
 				"message": "文章已保存到草稿箱",
 			})
-			return
 		default:
-			_, _ = vars.MongoPublish.InsertOne(context.Background(), bson.D{
-				bson.E{Key: "_id", Value: tools.NewId()},
-				bson.E{Key: "title", Value: article.Title},
-				bson.E{Key: "body", Value: body},
-				bson.E{Key: "img", Value: article.Img},
-				bson.E{Key: "category", Value: article.Category},
-				bson.E{Key: "show", Value: article.Show},
-				bson.E{Key: "view", Value: 0},
-				bson.E{Key: "sha256", Value: tools.Checksum(article.Body)},
-				bson.E{Key: "author", Value: user.Name},
-				bson.E{Key: "license", Value: article.License},
-				bson.E{Key: "is_hide", Value: false},
-				bson.E{Key: "created_at", Value: time.Now().Format("2006-01-02 15:04:05")},
-			})
+			a := models.Article{
+				Id:        tools.NewId(),
+				Title:     article.Title,
+				Body:      body,
+				Img:       article.Img,
+				Category:  article.Category,
+				Show:      article.Show,
+				View:      0,
+				SHA256:    tools.Checksum(article.Body),
+				Author:    user.Name,
+				License:   article.License,
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
+			}
+			vars.DB0.Table("article").Create(&a)
 			c.SecureJSON(http.StatusOK, gin.H{
 				"message": "文章已发布",
 			})

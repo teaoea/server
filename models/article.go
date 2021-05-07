@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type Category struct {
 	Id   string `json:"id" gorm:"id"`
 	Name string `json:"name" gorm:"name"`
@@ -22,16 +20,15 @@ func (UploadedImg) TableName() string {
 
 type Article struct {
 	Id        int64
-	Title     string    `json:"title"`    // 标题
-	Body      string    `json:"body"`     // 内容
-	Img       string    `json:"img"`      // 封面图
-	Category  string    `json:"category"` // 分类
-	Show      bool      `json:"show"`     // 文章属性 true: 公开 false: 私有
-	Status    bool      `json:"status"`   // 文章状态 ture: 完成 false: 草稿
-	View      int64     `json:"view"`     // 阅读量
-	SHA256    string    // 文章sha256校验和
-	Author    string    `json:"author"`  // 作者
-	License   string    `json:"license"` // 许可协议
-	IsHide    string    // 文章是否被拉黑 true: 拉黑 false: No
-	CreatedAt time.Time `json:"created_at"` // 创建时间
+	Title     string `json:"title"`    // 标题
+	Body      string `json:"body"`     // 内容
+	Img       string `json:"img"`      // 封面图
+	Category  string `json:"category"` // 分类
+	Show      bool   `json:"show"`     // 文章属性 true: 公开 false: 私有
+	View      int64  `json:"view"`     // 阅读量
+	SHA256    string // 文章sha256校验和
+	Author    string `json:"author"`  // 作者
+	License   string `json:"license"` // 许可协议
+	IsHide    bool   // 文章是否被拉黑 true: 拉黑 false: No
+	CreatedAt string `json:"created_at"` // 创建时间
 }
