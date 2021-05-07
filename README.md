@@ -42,6 +42,8 @@ key:
 2. 在数据库MongoDB,创建数据库名`conf`,集合名`suffixes`,并导入文件`.\script\suffixes.json`,集合`suffixes`
    是用来校验注册时,邮箱后缀是否合法,后续想添加其他邮箱后缀,直接在集合里面添加,而不需要重新编译项目,字段名只能是`suffix`,字段名错误,添加的邮箱后缀无法生效
 
+3. script存放项目需要的所有表,数据库使用的postgresql
+
 ## 依赖项
 
 1. [gin](https://github.com/gin-gonic/gin)
