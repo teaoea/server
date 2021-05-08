@@ -5,6 +5,7 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
+	"server/tools/mail"
 	"strings"
 	"time"
 
@@ -38,7 +39,7 @@ func Register(c *gin.Context) {
 			"message": "密码需要大于8位,小于16位",
 		})
 
-	case !tools.SuffixCheck(register.Email): // 校验电子邮件服务商是否运行注册
+	case !mail.SuffixCheck(register.Email): // 校验电子邮件服务商是否运行注册
 		addr := strings.Split(register.Email, "@") // 字符串分割
 		suffix := "@" + addr[1]                    // 截取邮箱后缀
 		c.SecureJSON(403, gin.H{

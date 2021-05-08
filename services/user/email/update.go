@@ -8,7 +8,7 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/services/user/auth"
-	"server/tools"
+	"server/tools/mail"
 	"strings"
 )
 
@@ -39,7 +39,7 @@ func Update(c *gin.Context) {
 			return
 		}
 
-		if !tools.SuffixCheck(e.Email) {
+		if !mail.SuffixCheck(e.Email) {
 			addr := strings.Split(e.Email, "@") // 字符串分割
 			suffix := "@" + addr[1]             // 截取邮箱后缀
 			c.SecureJSON(http.StatusForbidden, gin.H{

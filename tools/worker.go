@@ -2,6 +2,7 @@ package tools
 
 import (
 	"server/config"
+	"server/tools/mail"
 	"sync"
 	"time"
 )
@@ -45,10 +46,10 @@ func NewId() int64 {
 	w.Lock()
 	timestamp := time.Now().UnixNano() / 1e6
 	if timestamp < w.lastTimestamp {
-		admin := c.Mail.Admin
+		admin := c.Mail.Admin[0]
 		subject := "时钟回拨"
-		body := []byte("<h2>服务器时间回调,请同步服务器时间</h2>")
-		SendMail(admin, subject, body, "")
+		body := "<h2>服务器时间回调,请同步服务器时间</h2>"
+		mail.SendMail(admin, subject, body)
 		future := time.Now().AddDate(1, 0, 0).UnixNano() / 1e6 // 获取一年后的时间戳
 		return future
 	}
