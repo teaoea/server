@@ -12,7 +12,6 @@ import (
 // 	subject = "标题"
 //	html = <h1>Hello World</h1>
 //	return @false 发送失败 @true 发送成功
-
 func SendMail(to, subject, html string) bool {
 	e := mail.NewSMTPClient()
 	e.Host = vars.MailSmtp
