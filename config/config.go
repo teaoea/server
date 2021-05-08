@@ -37,7 +37,7 @@ type Mail struct {
 	Password string   `yaml:"password"`
 	Admin    []string `yaml:"admin"`
 	Smtp     string   `yaml:"smtp"`
-	Port     string   `yaml:"port"`
+	Port     int      `yaml:"port"`
 }
 
 type Mongo struct {
