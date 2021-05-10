@@ -15,8 +15,7 @@ create table public."user"
     is_admin      boolean default false,
     avatar        varchar,
     gender        varchar,
-    is_hide       boolean default false not null,
-    country       varchar
+    is_hide       boolean default false not null
 );
 
 alter table public."user"

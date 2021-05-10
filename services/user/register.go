@@ -61,11 +61,6 @@ func Register(c *gin.Context) {
 			"message": fmt.Sprintf("手机号%s已被注册", register.Number),
 		})
 
-	case register.Country == "":
-		c.SecureJSON(403, gin.H{
-			"message": "标*的输入框不能为空",
-		})
-
 	default:
 		hash, _ := bcrypt.GenerateFromPassword([]byte(register.Password2), bcrypt.DefaultCost) // 加密密码
 		encodePWD := string(hash)
@@ -75,7 +70,6 @@ func Register(c *gin.Context) {
 			Name:      register.Name,
 			Password:  encodePWD,
 			Email:     register.Email,
-			Country:   register.Country,
 			Number:    register.Number,
 			CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 		}

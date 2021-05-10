@@ -23,7 +23,6 @@ func Me(c *gin.Context) {
 			"name":          user.Name,
 			"email":         user.Email,
 			"email_active":  user.EmailActive,
-			"country":       user.Country,
 			"number":        user.Number,
 			"number_active": user.NumberActive,
 			"avatar":        user.Avatar,

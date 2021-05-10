@@ -6,7 +6,6 @@ type User struct {
 	Password     string `json:"password"`
 	Email        string `json:"email" `
 	EmailActive  bool   `json:"email_active" `
-	Country      string `json:"country" `
 	Number       string `json:"number"`
 	NumberActive bool   `json:"number_active" `
 	Avatar       string `json:"avatar" `
@@ -22,10 +21,10 @@ func (User) TableName() string {
 }
 
 type Github struct {
-	Id       int64  `gorm:"id" json:"id"`
-	GithubId string `gorm:"github_id" json:"github_id"`
-	Name     string `gorm:"name" json:"name"`
-	Email    string `gorm:"email" json:"email"`
+	Id       int64  `json:"id"`
+	GithubId string `json:"github_id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
 }
 
 func (Github) TableName() string {
