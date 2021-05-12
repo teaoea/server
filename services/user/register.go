@@ -17,6 +17,7 @@ func Register(c *gin.Context) {
 	var register struct {
 		models.User
 		Password2 string `json:"password2"`
+		Country   string `json:"country"`
 	}
 	var user models.User
 	_ = c.ShouldBindJSON(&register)
@@ -34,7 +35,7 @@ func Register(c *gin.Context) {
 			"message": "两次输入的密码不一致",
 		})
 
-	case len(register.Password2) < 8 || len(register.Password2) > 16: // 校验密码是否安全
+	case len(register.Password2) < 8 || len(register.Password2) > 32: // 校验密码是否安全
 		c.SecureJSON(403, gin.H{
 			"message": "密码需要大于8位,小于16位",
 		})
@@ -70,7 +71,7 @@ func Register(c *gin.Context) {
 			Name:      register.Name,
 			Password:  encodePWD,
 			Email:     register.Email,
-			Number:    register.Number,
+			Number:    fmt.Sprintf("%s-%s", register.Country, register.Number),
 			CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 		}
 
