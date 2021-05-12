@@ -7,14 +7,14 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"server/services"
+	"server/router"
 	"time"
 )
 
 func main() {
 	srv := &http.Server{
 		Addr:         ":1033",
-		Handler:      services.Router(),
+		Handler:      router.Router(),
 		ReadTimeout:  time.Second * 10,
 		WriteTimeout: time.Second * 10,
 	}

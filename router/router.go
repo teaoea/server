@@ -1,4 +1,4 @@
-package services
+package router
 
 import (
 	"github.com/gin-gonic/gin"
@@ -8,12 +8,11 @@ import (
 	"server/services/user/auth"
 	"server/services/user/email"
 	"server/services/user/oauth"
-	"server/tools"
 )
 
 func Router() *gin.Engine {
 	router := gin.New()
-	router.Use(tools.Server())
+	router.Use(Server(), Cor())
 	v1 := router.Group("/v1")
 	v1.GET("/category", article.CategoryList) // 分类列表
 	{
@@ -23,7 +22,7 @@ func Router() *gin.Engine {
 			account.POST("/login", user.Login)       //登录
 		}
 
-		accountAuth := v1.Group("/account", auth.LoginAuth())
+		accountAuth := v1.Group("/account", LoginAuth())
 		{
 			accountAuth.GET("/me", user.Me)                           //个人中心
 			accountAuth.GET("/email/sendcode", email.SendCode)        //邮箱验证码发送
@@ -35,17 +34,17 @@ func Router() *gin.Engine {
 			accountAuth.POST("/oauth/github", oauth.Github)           //github账户绑定
 		}
 
-		articleAuth := v1.Group("/article", auth.LoginAuth())
+		articleAuth := v1.Group("/article", LoginAuth())
 		{
 			articleAuth.POST("/write", article.WriteArticle) // 编写文章
 		}
 
-		upload := v1.Group("/uploaded", auth.LoginAuth())
+		upload := v1.Group("/uploaded", LoginAuth())
 		{
 			upload.POST("/img", article.UploadedFile) // 上传图片
 		}
 
-		_permission := v1.Group("/permission", auth.ProxyAuth(), auth.LoginAuth())
+		_permission := v1.Group("/permission", auth.ProxyAuth(), LoginAuth())
 		{
 			_permission.POST("/article", permission.HideArticle) // 隐藏文章
 		}
