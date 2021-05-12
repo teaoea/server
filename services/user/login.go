@@ -19,7 +19,7 @@ func Login(c *gin.Context) {
 	}
 	var user models.User
 	_ = c.ShouldBindJSON(&login)
-	nameCheck := vars.DB0.Table("user").Where("name = @name OR email = @name OR number= @name", sql.Named("name", login.Name)).Find(&user).RowsAffected
+	nameCheck := vars.DB0.Table("user").Where("name = @name OR email = @name", sql.Named("name", login.Name)).Find(&user).RowsAffected
 
 	if nameCheck == 0 {
 		c.SecureJSON(404, gin.H{
@@ -28,7 +28,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("name = @name OR email = @name OR number= @name", sql.Named("name", login.Name)).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("name = @name OR email = @name", sql.Named("name", login.Name)).Rows()
 
 	for rows.Next() {
 		var user models.User
