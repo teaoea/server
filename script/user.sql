@@ -9,7 +9,6 @@ create table public."user"
     number        varchar               not null,
     email_active  boolean default false,
     number_active boolean default false,
-    ip            varchar,
     created_at    timestamp with time zone,
     is_active     boolean default false,
     is_admin      boolean default false,
