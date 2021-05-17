@@ -8,6 +8,7 @@ import (
 	"server/services/user/auth"
 	"server/services/user/email"
 	"server/services/user/oauth"
+	"server/services/vue"
 )
 
 func Router() *gin.Engine {
@@ -34,9 +35,9 @@ func Router() *gin.Engine {
 			accountAuth.POST("/oauth/github", oauth.Github)           //github账户绑定
 		}
 
-		articleAuth := v1.Group("/article", LoginAuth())
+		Article := v1.Group("/article", LoginAuth())
 		{
-			articleAuth.POST("/write", article.WriteArticle) // 编写文章
+			Article.POST("/write", article.WriteArticle) // 编写文章
 		}
 
 		upload := v1.Group("/uploaded", LoginAuth())
@@ -44,9 +45,14 @@ func Router() *gin.Engine {
 			upload.POST("/img", article.UploadedFile) // 上传图片
 		}
 
-		_permission := v1.Group("/permission", auth.ProxyAuth(), LoginAuth())
+		Permission := v1.Group("/permission", auth.ProxyAuth(), LoginAuth())
 		{
-			_permission.POST("/article", permission.HideArticle) // 隐藏文章
+			Permission.POST("/article", permission.HideArticle) // 隐藏文章
+		}
+
+		Vue := v1.Group("/vue")
+		{
+			Vue.POST("/logger", vue.Logger)
 		}
 	}
 	return router
