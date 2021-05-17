@@ -70,10 +70,9 @@ func Cor() gin.HandlerFunc {
 		}
 
 		if method == "OPTIONS" {
-			c.SecureJSON(200, nil)
+			c.AbortWithStatus(204)
 		}
 
 		c.Next()
 	}
-
 }
