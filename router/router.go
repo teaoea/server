@@ -8,7 +8,6 @@ import (
 	"server/services/user/auth"
 	"server/services/user/email"
 	"server/services/user/oauth"
-	"server/services/vue"
 )
 
 func Router() *gin.Engine {
@@ -48,11 +47,6 @@ func Router() *gin.Engine {
 		Permission := v1.Group("/permission", auth.ProxyAuth(), LoginAuth())
 		{
 			Permission.POST("/article", permission.HideArticle) // 隐藏文章
-		}
-
-		Vue := v1.Group("/vue")
-		{
-			Vue.POST("/logger", vue.Logger)
 		}
 	}
 	return router
