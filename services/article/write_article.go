@@ -48,18 +48,18 @@ func WriteArticle(c *gin.Context) {
 			})
 			return
 		}
-		body := tools.WriteMd(article.Body)
+		content := tools.WriteMd("./static/article", article.Content)
 		switch {
 		case !article.Status:
 			a := models.Article{
 				Id:        tools.NewId(),
 				Title:     article.Title,
-				Body:      body,
+				Content:   content,
 				Img:       article.Img,
 				Category:  article.Category,
 				Show:      article.Show,
 				View:      0,
-				SHA256:    tools.Checksum(article.Body),
+				SHA256:    tools.Checksum(article.Content),
 				Author:    user.Name,
 				License:   article.License,
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
@@ -72,12 +72,12 @@ func WriteArticle(c *gin.Context) {
 			a := models.Article{
 				Id:        tools.NewId(),
 				Title:     article.Title,
-				Body:      body,
+				Content:   content,
 				Img:       article.Img,
 				Category:  article.Category,
 				Show:      article.Show,
 				View:      0,
-				SHA256:    tools.Checksum(article.Body),
+				SHA256:    tools.Checksum(article.Content),
 				Author:    user.Name,
 				License:   article.License,
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),

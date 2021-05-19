@@ -18,13 +18,14 @@ func Mkdir(filepath string) {
 }
 
 // WriteMd 把文章内容保存为md文件
-// body: 内容
+// path: 文件路径
+// content: 内容
 // return 返回文件路径,数据库存储文件路径
-func WriteMd(body string) string {
-	Mkdir("./static/article")
+func WriteMd(path, content string) string {
+	Mkdir(path)
 	// 文章保存路径,文章内容保存为md文件
-	filepath := fmt.Sprintf("./static/article/%d/%s/%d/%d.md",
-		time.Now().Year(), time.Now().Month(), time.Now().Day(), NewId())
+	filepath := fmt.Sprintf("%s/%d/%s/%d/%d.md",
+		path, time.Now().Year(), time.Now().Month(), time.Now().Day(), NewId())
 	file, err := os.Create(filepath)
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +38,7 @@ func WriteMd(body string) string {
 	}(file)
 
 	write := bufio.NewWriter(file)
-	_, _ = write.WriteString(body)
+	_, _ = write.WriteString(content)
 	_ = write.Flush()
 	return filepath
 }

@@ -4,7 +4,7 @@ create table public.article
         constraint article_pk
             primary key,
     title      varchar               not null,
-    body       varchar               not null,
+    content    varchar               not null,
     img        varchar,
     category   varchar               not null,
     show       boolean default false not null,
@@ -16,13 +16,13 @@ create table public.article
     created_at varchar               not null
 );
 
-comment on column public.article.body is '存储文件保存的路径';
+comment on column public.article.content is '存储文件保存的路径';
 
 alter table public.article
     owner to postgres;
 
 create unique index article_body_uindex
-    on public.article (body);
+    on public.article (content);
 
 create unique index article_id_uindex
     on public.article (id);

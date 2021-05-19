@@ -21,7 +21,7 @@ func (UploadedImg) TableName() string {
 type Article struct {
 	Id        int64
 	Title     string `json:"title"`    // 标题
-	Body      string `json:"body"`     // 内容
+	Content   string `json:"content"`  // 内容
 	Img       string `json:"img"`      // 封面图
 	Category  string `json:"category"` // 分类
 	Show      bool   `json:"show"`     // 文章属性 true: 公开 false: 私有
