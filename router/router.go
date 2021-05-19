@@ -36,7 +36,9 @@ func Router() *gin.Engine {
 
 		Article := v1.Group("/article", LoginAuth())
 		{
-			Article.POST("/write", article.WriteArticle) // 编写文章
+			Article.POST("/write", article.WriteArticle)                  // 编写文章
+			Article.POST("/articlecomment", article.WriteArticleComment)  // 编写评论
+			Article.POST("/article/commenttwo", article.CommentToComment) // 编写评论的评论
 		}
 
 		upload := v1.Group("/uploaded", LoginAuth())

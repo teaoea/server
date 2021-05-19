@@ -48,3 +48,15 @@ type Comment struct {
 func (Comment) TableName() string {
 	return "comment"
 }
+
+type CommentTwo struct {
+	Id      int64
+	Comment int64  `json:"comment"` // 上级评论
+	User    string `json:"user"`    // 用户
+	Content string `json:"content"` // 内容
+	Time    string `json:"time"`    // 时间
+}
+
+func (CommentTwo) TableName() string {
+	return "comment_two"
+}

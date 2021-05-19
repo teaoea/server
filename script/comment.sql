@@ -1,6 +1,8 @@
 create table public.comment
 (
-    id      bigint  not null,
+    id      bigint  not null
+        constraint comment_pk
+            primary key,
     title   bigint  not null,
     "user"  varchar not null,
     content varchar not null,
