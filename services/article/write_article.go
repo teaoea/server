@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"server/config/vars"
 	"server/models"
 	"server/services/user/auth"
@@ -28,13 +27,13 @@ func WriteArticle(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&article)
 		if !user.IsActive {
-			c.SecureJSON(http.StatusUnauthorized, gin.H{
+			c.SecureJSON(403, gin.H{
 				"message": "账户未激活",
 			})
 			return
 		}
 		if len(article.Title) > 90 || article.Title == "" {
-			c.SecureJSON(http.StatusForbidden, gin.H{
+			c.SecureJSON(411, gin.H{
 				"message": "标题过长",
 			})
 			return
@@ -43,7 +42,7 @@ func WriteArticle(c *gin.Context) {
 		var ca models.Category
 		caCheck := vars.DB0.Table("category").Where(&models.Category{Name: article.Category}, "name").Find(&ca).RowsAffected
 		if caCheck == 0 {
-			c.SecureJSON(http.StatusNotFound, gin.H{
+			c.SecureJSON(404, gin.H{
 				"message": fmt.Sprintf("类别'%s'不存在", article.Category),
 			})
 			return
@@ -65,7 +64,7 @@ func WriteArticle(c *gin.Context) {
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			}
 			vars.DB0.Table("draft").Create(&a)
-			c.SecureJSON(http.StatusOK, gin.H{
+			c.SecureJSON(200, gin.H{
 				"message": "文章已保存到草稿箱",
 			})
 		default:
@@ -83,7 +82,7 @@ func WriteArticle(c *gin.Context) {
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			}
 			vars.DB0.Table("article").Create(&a)
-			c.SecureJSON(http.StatusOK, gin.H{
+			c.SecureJSON(200, gin.H{
 				"message": "文章已发布",
 			})
 		}
