@@ -32,3 +32,19 @@ type Article struct {
 	IsHide    bool   // 文章是否被拉黑 true: 拉黑 false: No
 	CreatedAt string `json:"created_at"` // 创建时间
 }
+
+func (Article) TableName() string {
+	return "article"
+}
+
+type Comment struct {
+	Id      int64
+	Title   int64  `json:"title"`   // 文章
+	User    string `json:"user"`    // 用户
+	Content string `json:"content"` // 内容
+	Time    string `json:"time"`    // 时间
+}
+
+func (Comment) TableName() string {
+	return "comment"
+}
