@@ -39,7 +39,7 @@ func RedisClient(host, port, password string, DB int) *redis.Client {
 	})
 	_, err := rdb.Ping(context.TODO()).Result()
 	if err != nil {
-		panic("redis连接失败,检查config.yaml配置文件设置,节点mongo是否设置正确")
+		panic("redis连接失败,检查config.yaml配置文件设置,节点redis是否设置正确")
 	}
 	return rdb
 }
@@ -55,7 +55,7 @@ func MongoClient(user, password, host, port, database, collection string) *mongo
 		SetMinPoolSize(5))
 	err := mgc.Ping(ctx, nil)
 	if err != nil {
-		panic("mongo连接失败,检查config.yaml配置文件是否设置正确,节点redis是否设置正确")
+		panic("mongo连接失败,检查config.yaml配置文件是否设置正确,节点mongo是否设置正确")
 	}
 	coll := mgc.Database(database).Collection(collection)
 	return coll
