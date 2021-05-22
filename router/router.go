@@ -5,7 +5,6 @@ import (
 	"server/services/article"
 	"server/services/permission"
 	"server/services/user"
-	"server/services/user/auth"
 	"server/services/user/email"
 	"server/services/user/oauth"
 )
@@ -46,7 +45,7 @@ func Router() *gin.Engine {
 			upload.POST("/img", article.UploadedFile) // 上传图片
 		}
 
-		Permission := v1.Group("/permission", auth.ProxyAuth(), LoginAuth())
+		Permission := v1.Group("/permission", ProxyAuth(), LoginAuth())
 		{
 			Permission.POST("/article", permission.HideArticle) // 隐藏文章
 		}

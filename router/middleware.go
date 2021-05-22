@@ -2,12 +2,13 @@ package router
 
 import (
 	"context"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"server/config/vars"
 	"server/models"
-	"server/services/user/auth"
 	"server/tools"
 	"time"
 )
@@ -35,7 +36,7 @@ func LoginAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		t := c.GetHeader("Authorization")
-		parse := auth.Parse(t)
+		parse := tools.Parse(t)
 		id := parse.(jwt.MapClaims)["id"]
 
 		rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
@@ -74,5 +75,31 @@ func Cor() gin.HandlerFunc {
 		}
 
 		c.Next()
+	}
+}
+
+func ipCheck(ip string) bool {
+	var ipaddr struct{}
+
+	filter := bson.D{
+		bson.E{Key: "ip", Value: ip},
+	}
+	val := vars.MongoIpaddr.FindOne(context.TODO(), filter).Decode(&ipaddr)
+	return val != mongo.ErrNoDocuments
+}
+
+// ProxyAuth 不是指定IP,无权访问的路由组
+func ProxyAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		ip := c.ClientIP()
+		switch {
+		case !ipCheck(ip):
+			c.JSON(403, gin.H{
+				"message": fmt.Sprintf("ip地址%s,无权限访问", ip),
+			})
+		default:
+			c.Next()
+		}
 	}
 }
