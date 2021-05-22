@@ -5,13 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
-	"server/services/user/auth"
+	"server/tools"
 )
 
 func Me(c *gin.Context) {
 
 	t := c.GetHeader("Authorization")
-	parse := auth.Parse(t)
+	parse := tools.Parse(t)
 	id := parse.(jwt.MapClaims)["id"]
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 
