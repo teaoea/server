@@ -20,7 +20,7 @@ func RefreshToken(ctx *gin.Context) {
 		var user models.User
 		_ = vars.DB0.ScanRows(rows, &user)
 
-		value := auth.Create(user.Id, user.Name)
+		value := auth.Create(user.Id)
 
 		vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
 		ctx.SecureJSON(200, gin.H{

@@ -4,21 +4,22 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"server/config/vars"
 	"server/tools"
+	"time"
 )
 
 type token struct {
-	Id   int64  `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
+	Id   int64 `json:"id,omitempty"`
+	Time int64 `json:"time,omitempty"`
 	jwt.Claims
 }
 
 // Create
 /// id 签发标识,userId
 /// name 签发人,userName
-func Create(id int64, name string) string {
+func Create(id int64) string {
 	claims := &token{
 		Id:   id,
-		Name: name,
+		Time: time.Now().UnixNano(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	str, err := token.SignedString(vars.KeyToken)

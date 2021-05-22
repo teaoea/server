@@ -39,7 +39,7 @@ func Login(c *gin.Context) {
 		*/
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
 		if decodePWD == nil {
-			value := auth.Create(user.Id, user.Name)
+			value := auth.Create(user.Id)
 
 			vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
 			// 返回token
