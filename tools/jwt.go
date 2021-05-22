@@ -1,15 +1,15 @@
-package auth
+package tools
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"server/config/vars"
-	"server/tools"
 	"time"
 )
 
 type token struct {
-	Id   int64 `json:"id,omitempty"`
-	Time int64 `json:"time,omitempty"`
+	Id        int64 `json:"id,omitempty"`
+	CreatedAt int64 `json:"created_at,omitempty"`
 	jwt.Claims
 }
 
@@ -18,13 +18,13 @@ type token struct {
 /// name 签发人,userName
 func Create(id int64) string {
 	claims := &token{
-		Id:   id,
-		Time: time.Now().UnixNano(),
+		Id:        id,
+		CreatedAt: time.Now().UnixNano(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	str, err := token.SignedString(vars.KeyToken)
 	if err != nil {
-		tools.Err("Create", "创建token失败")
+		Err("Create", fmt.Sprintf("%s", err))
 	}
 	return str
 }
