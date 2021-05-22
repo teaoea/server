@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"server/config/vars"
 	"server/models"
-	"server/services/user/auth"
+	"server/tools"
 	"server/tools/mail"
 	"strings"
 )
@@ -18,7 +18,7 @@ type emailUpdate struct {
 
 func Update(c *gin.Context) {
 	token := c.GetHeader("Authorization")
-	parse := auth.Parse(token)
+	parse := tools.Parse(token)
 	id := parse.(jwt.MapClaims)["id"]
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
 

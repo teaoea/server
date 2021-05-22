@@ -6,7 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"server/config/vars"
 	"server/models"
-	"server/services/user/auth"
+	"server/tools"
 )
 
 type passwordUpdate struct {
@@ -20,7 +20,7 @@ func ChangePassword(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pwd)
 
 	token := c.GetHeader("Authorization")
-	parse := auth.Parse(token)
+	parse := tools.Parse(token)
 	id := parse.(jwt.MapClaims)["id"]
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
 

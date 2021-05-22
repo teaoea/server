@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
-	"server/services/user/auth"
+	"server/tools"
 )
 
 type uploadedFile struct {
@@ -15,7 +15,7 @@ type uploadedFile struct {
 func UploadedFile(c *gin.Context) {
 	u := uploadedFile{}
 	token := c.GetHeader("Authorization")
-	parse := auth.Parse(token)
+	parse := tools.Parse(token)
 	id := parse.(jwt.MapClaims)["id"]
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
 

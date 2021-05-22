@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"server/config/vars"
 	"server/models"
-	"server/services/user/auth"
+	"server/tools"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -39,7 +39,7 @@ func Login(c *gin.Context) {
 		*/
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
 		if decodePWD == nil {
-			value := auth.Create(user.Id)
+			value := tools.Create(user.Id)
 
 			vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
 			// 返回token
