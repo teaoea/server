@@ -2,7 +2,6 @@ package email
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"server/config/vars"
@@ -17,10 +16,9 @@ type emailUpdate struct {
 }
 
 func Update(c *gin.Context) {
-	token := c.GetHeader("Authorization")
-	parse := tools.Parse(token)
-	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
+
+	value := c.GetHeader("Authorization")
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 
 	for rows.Next() {
 		var (

@@ -1,7 +1,6 @@
 package user
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"server/config/vars"
@@ -16,17 +15,18 @@ type passwordUpdate struct {
 }
 
 func ChangePassword(c *gin.Context) {
-	pwd := passwordUpdate{}
-	_ = c.ShouldBindJSON(&pwd)
 
-	token := c.GetHeader("Authorization")
-	parse := tools.Parse(token)
-	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ? ", id).Rows()
+	value := c.GetHeader("Authorization")
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 
 	for rows.Next() {
-		var user models.User
+		var (
+			user models.User
+			pwd  passwordUpdate
+		)
+
 		_ = vars.DB0.ScanRows(rows, &user)
+		_ = c.ShouldBindJSON(&pwd)
 
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(pwd.Old))
 

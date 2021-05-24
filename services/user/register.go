@@ -14,12 +14,15 @@ import (
 )
 
 func Register(c *gin.Context) {
-	var register struct {
-		models.User
-		Password2 string `json:"password2"`
-		Country   string `json:"country"`
-	}
-	var user models.User
+
+	var (
+		user     models.User
+		register struct {
+			models.User
+			Password2 string `json:"password2"`
+			Country   string `json:"country"`
+		}
+	)
 	_ = c.ShouldBindJSON(&register)
 
 	nameCheck := vars.DB0.Table("user").Where(&models.User{Name: register.Name}, "name").Find(&user).RowsAffected

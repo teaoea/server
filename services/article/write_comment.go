@@ -2,7 +2,6 @@ package article
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
@@ -13,11 +12,13 @@ import (
 // WriteArticleComment
 /// 评论无法删除
 func WriteArticleComment(c *gin.Context) {
-	token := c.GetHeader("Authorization")
-	parse := tools.Parse(token)
-	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
-
+	value := c.GetHeader("Authorization")
+	id := tools.Parse(value)
+	if id == 0 {
+		c.SecureJSON(403, "登录过期,请重新登录")
+		return
+	}
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 	for rows.Next() {
 		var user models.User
 		var article models.Article
@@ -61,15 +62,15 @@ func WriteArticleComment(c *gin.Context) {
 // CommentToComment
 /// 评论的评论
 func CommentToComment(c *gin.Context) {
-	token := c.GetHeader("Authorization")
-	parse := tools.Parse(token)
-	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	value := c.GetHeader("Authorization")
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 
 	for rows.Next() {
-		var user models.User
-		var comment models.CommentTwo
-		var one models.Comment
+		var (
+			user    models.User
+			comment models.CommentTwo
+			one     models.Comment
+		)
 
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&comment)

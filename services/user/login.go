@@ -14,10 +14,13 @@ import (
 )
 
 func Login(c *gin.Context) {
-	var login struct {
-		models.User
-	}
-	var user models.User
+	var (
+		user  models.User
+		login struct {
+			models.User
+		}
+	)
+
 	_ = c.ShouldBindJSON(&login)
 	nameCheck := vars.DB0.Table("user").Where("name = @name OR email = @name", sql.Named("name", login.Name)).Find(&user).RowsAffected
 
@@ -39,7 +42,7 @@ func Login(c *gin.Context) {
 		*/
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
 		if decodePWD == nil {
-			value := tools.Create(user.Id)
+			value := tools.Create(user.Id, user.Name)
 
 			vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
 			// 返回token

@@ -3,7 +3,6 @@ package email
 import (
 	"context"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
@@ -15,15 +14,15 @@ type active struct {
 }
 
 func Active(c *gin.Context) {
-
-	active := active{}
-	token := c.GetHeader("Authorization")
-	parse := tools.Parse(token)
-	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	value := c.GetHeader("Authorization")
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 
 	for rows.Next() {
-		var user models.User
+		var (
+			user   models.User
+			active active
+		)
+
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&active)
 

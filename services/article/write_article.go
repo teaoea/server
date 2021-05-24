@@ -2,7 +2,6 @@ package article
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
@@ -12,17 +11,18 @@ import (
 
 func WriteArticle(c *gin.Context) {
 
-	token := c.GetHeader("Authorization")
-	parse := tools.Parse(token)
-	id := parse.(jwt.MapClaims)["id"]
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	value := c.GetHeader("Authorization")
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 
 	for rows.Next() {
-		var user models.User
-		var article struct {
-			models.Article
-			Status bool `json:"status"` // 文章状态 ture: 完成 false: 草稿
-		}
+		var (
+			user    models.User
+			article struct {
+				models.Article
+				Status bool `json:"status"` // 文章状态 ture: 完成 false: 草稿
+			}
+		)
+
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&article)
 		if !user.IsActive {

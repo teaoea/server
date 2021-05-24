@@ -1,7 +1,6 @@
 package oauth
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
@@ -15,14 +14,15 @@ type github struct {
 }
 
 func Github(c *gin.Context) {
-	t := c.GetHeader("Authorization")
-	parse := tools.Parse(t)
-	id := parse.(jwt.MapClaims)["jti"]
-	g := github{}
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", id).Rows()
+	value := c.GetHeader("Authorization")
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 
 	for rows.Next() {
-		var user models.User
+		var (
+			user models.User
+			g    github
+		)
+
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&g)
 

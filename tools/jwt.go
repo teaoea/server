@@ -8,18 +8,20 @@ import (
 )
 
 type token struct {
-	Id        int64 `json:"id,omitempty"`
-	CreatedAt int64 `json:"created_at,omitempty"`
+	Id      int64  `json:"id,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Expired int64  `json:"expired,omitempty"`
 	jwt.Claims
 }
 
 // Create
 /// id 签发标识,userId
 /// name 签发人,userName
-func Create(id int64) string {
+func Create(id int64, name string) string {
 	claims := &token{
-		Id:        id,
-		CreatedAt: time.Now().UnixNano(),
+		Id:      id,
+		Name:    name,
+		Expired: time.Now().AddDate(0, 0, 7).UnixNano(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	str, err := token.SignedString(vars.KeyToken)
@@ -29,13 +31,21 @@ func Create(id int64) string {
 	return str
 }
 
-// Parse
-/// 解析token
-func Parse(str string) (claims jwt.Claims) {
+// parse
+/// 解析token的方法
+func parse(str string) (claims jwt.Claims) {
 	var token *jwt.Token
 	token, _ = jwt.Parse(str, func(token *jwt.Token) (interface{}, error) {
 		return vars.KeyToken, nil
 	})
 	claims = token.Claims
 	return
+}
+
+// Parse
+/// 解析token,并返回id
+func Parse(value string) interface{} {
+	parse := parse(value)
+	id := parse.(jwt.MapClaims)["id"]
+	return id
 }
