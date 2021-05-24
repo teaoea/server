@@ -6,6 +6,7 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
+	"strconv"
 	"time"
 )
 
@@ -20,7 +21,7 @@ func RefreshToken(c *gin.Context) {
 
 		value := tools.Create(user.Id, user.Name)
 
-		vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
+		vars.RedisToken.Set(context.Background(), strconv.FormatInt(user.Id, 10), value, time.Hour*168)
 		c.SecureJSON(200, gin.H{
 			"message": value,
 		})

@@ -9,6 +9,7 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
+	"strconv"
 	"time"
 )
 
@@ -42,7 +43,7 @@ func LoginAuth() gin.HandlerFunc {
 
 			_ = vars.DB0.ScanRows(rows, &user)
 
-			result, _ := vars.RedisToken.Get(context.Background(), user.Name).Result()
+			result, _ := vars.RedisToken.Get(context.Background(), strconv.FormatInt(user.Id, 10)).Result()
 
 			if result != value {
 				c.JSON(403, gin.H{

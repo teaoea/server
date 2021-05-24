@@ -7,6 +7,7 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -44,7 +45,7 @@ func Login(c *gin.Context) {
 		if decodePWD == nil {
 			value := tools.Create(user.Id, user.Name)
 
-			vars.RedisToken.Set(context.Background(), user.Name, value, time.Hour*168)
+			vars.RedisToken.Set(context.Background(), strconv.FormatInt(user.Id, 10), value, time.Hour*168)
 			// 返回token
 			c.SecureJSON(200, gin.H{
 				"message": value,
