@@ -16,18 +16,22 @@ import (
 // Server
 /// 日志中间件,访问日志保存到mongodb
 func Server() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
+	return func(c *gin.Context) {
 		start := time.Now()
-		ctx.Next()
-		_, _ = vars.MongoHttp.InsertOne(context.TODO(), bson.D{
-			bson.E{Key: "_id", Value: tools.NewId()},
-			bson.E{Key: "Method", Value: ctx.Request.Method},                     // 请求方式
-			bson.E{Key: "Path", Value: ctx.Request.URL.Path},                     // 请求路径
-			bson.E{Key: "Delay", Value: time.Since(start) / 1e6},                 // 延迟
-			bson.E{Key: "Status", Value: ctx.Writer.Status()},                    // 请求状态
-			bson.E{Key: "Time", Value: time.Now().Format("2006-01-02 15:04:05")}, // 请求时间
-			bson.E{Key: "IPv4", Value: ctx.ClientIP()},                           // 客户端ip
-		})
+		if c.Request.Method == "OPTIONS" {
+			c.Next()
+		} else {
+			c.Next()
+			_, _ = vars.MongoHttp.InsertOne(context.TODO(), bson.D{
+				bson.E{Key: "_id", Value: tools.NewId()},
+				bson.E{Key: "method", Value: c.Request.Method},                       // 请求方式
+				bson.E{Key: "path", Value: c.Request.URL.Path},                       // 请求路径
+				bson.E{Key: "delay", Value: time.Since(start) / 1e6},                 // 延迟
+				bson.E{Key: "status", Value: c.Writer.Status()},                      // 请求状态
+				bson.E{Key: "time", Value: time.Now().Format("2006-01-02 15:04:05")}, // 请求时间
+				bson.E{Key: "ipv4", Value: c.ClientIP()},                             // 客户端ip
+			})
+		}
 	}
 }
 
