@@ -49,6 +49,11 @@ func Router() *gin.Engine {
 		{
 			Permission.POST("/article", permission.HideArticle) // 隐藏文章
 		}
+
+		Angular := v1.Group("/angular")
+		{
+			Angular.POST("/error", angular.Error) // angular错误日志收集
+		}
 	}
 	return router
 }

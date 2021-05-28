@@ -11,10 +11,11 @@ var (
 	RedisCode  = config.RedisClient(c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 0)
 	RedisToken = config.RedisClient(c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 1)
 
-	MongoSuffix = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "conf", "suffixes")
-	MongoIpaddr = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "conf", "ipaddr")
-	MongoHttp   = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "log", "http")
-	MongoError  = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "log", "error")
+	MongoSuffix       = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "conf", "suffixes")
+	MongoIpaddr       = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "conf", "ipaddr")
+	MongoHttp         = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "log", "http")
+	MongoError        = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "log", "error")
+	MongoAngularError = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "angular", "error")
 
 	KeyToken = c.Key.Token
 
