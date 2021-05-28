@@ -1,18 +1,18 @@
-create table public.comment
+create table public.reply
 (
     id         bigint  not null
-        constraint comment_pk
+        constraint comment_two_pk
             primary key,
-    title      bigint  not null,
+    comment    bigint  not null,
     "user"     varchar not null,
     content    varchar not null,
     created_at varchar not null
 );
 
-alter table public.comment
+alter table public.reply
     owner to postgres;
 
-create unique index comment_id_uindex
-    on public.comment (id);
+create unique index comment_two_id_uindex
+    on public.reply (id);
 
 
