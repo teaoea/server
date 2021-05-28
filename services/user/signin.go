@@ -14,7 +14,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(c *gin.Context) {
+func SignIn(c *gin.Context) {
 	var (
 		user  models.User
 		login struct {

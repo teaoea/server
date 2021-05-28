@@ -2,10 +2,12 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"server/services/angular"
 	"server/services/article"
 	"server/services/permission"
 	"server/services/user"
 	"server/services/user/email"
+	"server/services/user/modify"
 	"server/services/user/oauth"
 )
 
@@ -15,37 +17,44 @@ func Router() *gin.Engine {
 	v1 := router.Group("/v1")
 	v1.GET("/category", article.CategoryList) // 分类列表
 	{
-		account := v1.Group("/account")
+		accountGroup := v1.Group("/account")
 		{
-			account.POST("/register", user.Register) //注册
-			account.POST("/login", user.Login)       //登录
+			accountGroup.POST("/signup", user.SignUp)         //注册
+			accountGroup.POST("/signin", user.SignIn)         //登录
+			accountGroup.GET("/me", user.Me, Authorization()) //个人中心
+
+			emailGroup := accountGroup.Group("/email", Authorization())
+			{
+				emailGroup.GET("sendcode", email.SendCode) //邮箱验证码发送
+				emailGroup.POST("/active", email.Active)   //邮箱激活
+			}
+
+			modifyGroup := accountGroup.Group("/modify", Authorization())
+			{
+				modifyGroup.POST("/password", modify.Password) //修改密码
+				modifyGroup.POST("/email", modify.Email)       //修改邮箱
+				modifyGroup.POST("/profile", modify.Profile)   //修改个人信息
+			}
+
+			oauthGroup := accountGroup.Group("/oauth", Authorization())
+			{
+				oauthGroup.POST("/github", oauth.Github) //github账户绑定
+			}
 		}
 
-		accountAuth := v1.Group("/account", LoginAuth())
+		Article := v1.Group("/article", Authorization())
 		{
-			accountAuth.GET("/me", user.Me)                           //个人中心
-			accountAuth.GET("/email/sendcode", email.SendCode)        //邮箱验证码发送
-			accountAuth.POST("/email/active", email.Active)           //邮箱激活
-			accountAuth.POST("/email/update", email.Update)           //修改邮箱
-			accountAuth.POST("/change_password", user.ChangePassword) //修改密码
-			accountAuth.POST("/change_profile", user.UpdateUser)      //修改个人信息
-			accountAuth.GET("/token/refresh", user.RefreshToken)      //刷新token
-			accountAuth.POST("/oauth/github", oauth.Github)           //github账户绑定
+			Article.POST("/write", article.WriteArticle)     // 编写文章
+			Article.POST("/comment", article.CommentArticle) // 编写评论
+			Article.POST("/comments", article.ReplyComment)  // 回复评论
 		}
 
-		Article := v1.Group("/article", LoginAuth())
-		{
-			Article.POST("/write", article.WriteArticle)                  // 编写文章
-			Article.POST("/articlecomment", article.WriteArticleComment)  // 编写评论
-			Article.POST("/article/commenttwo", article.CommentToComment) // 编写评论的评论
-		}
-
-		upload := v1.Group("/uploaded", LoginAuth())
+		upload := v1.Group("/uploaded", Authorization())
 		{
 			upload.POST("/img", article.UploadedFile) // 上传图片
 		}
 
-		Permission := v1.Group("/permission", ProxyAuth(), LoginAuth())
+		Permission := v1.Group("/permission", ProxyAuth(), Authorization())
 		{
 			Permission.POST("/article", permission.HideArticle) // 隐藏文章
 		}

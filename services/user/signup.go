@@ -13,7 +13,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Register(c *gin.Context) {
+func SignUp(c *gin.Context) {
 
 	var (
 		user     models.User

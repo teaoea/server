@@ -1,4 +1,4 @@
-package user
+package modify
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,7 @@ import (
 	"server/tools"
 )
 
-func UpdateUser(c *gin.Context) {
+func Profile(c *gin.Context) {
 
 	value := c.GetHeader("Authorization")
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()

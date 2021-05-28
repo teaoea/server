@@ -31,8 +31,8 @@ func Server() gin.HandlerFunc {
 	}
 }
 
-// LoginAuth 未登录无权访问的路由组
-func LoginAuth() gin.HandlerFunc {
+// Authorization  未登录无权访问的路由组
+func Authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		value := c.GetHeader("Authorization")
