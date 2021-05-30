@@ -2,18 +2,18 @@ package models
 
 type Permission struct {
 	Id              int    `json:"id"`
-	UserId          int64  `json:"user_id"` // 被授权用户id
-	Name            string `json:"name"`    // 被授权用户
-	HideArticle     bool   `json:"hide_article"`
-	HideArticleAuth string `json:"hide_article_auth" ` // 谁授予用户隐藏文章的权限
-	HideUser        bool   `json:"hide_user"`
-	HideUserAuth    string `json:"hide_user_auth"` // 谁授予用户隐藏用户的权限
-	DelComment      bool   `json:"del_comment"`
-	DelCommentAuth  string `json:"del_comment_auth"` // 谁授权用户删除评论的权限
-	AddCategory     bool   `json:"add_category"`
-	AddCategoryAuth string `json:"add_category_auth"` // 谁授权用户添加分类的权限
-	DelCategory     bool   `json:"del_category"`
-	DelCategoryAuth string `json:"del_category_auth"` // 谁授权用户删除分类的权限
+	UserId          int64  `json:"user_id"`            // authorized user's id
+	Name            string `json:"name"`               // authorized username
+	HideArticle     bool   `json:"hide_article"`       // hide article
+	HideArticleAuth string `json:"hide_article_auth" ` // who authorized user permission to hide articles?
+	HideUser        bool   `json:"hide_user"`          // hide user
+	HideUserAuth    string `json:"hide_user_auth"`     // who authorized user permission to hide users?
+	DelComment      bool   `json:"del_comment"`        // delete comment
+	DelCommentAuth  string `json:"del_comment_auth"`   // who authorized user permission to delete comment?
+	AddCategory     bool   `json:"add_category"`       // create category
+	AddCategoryAuth string `json:"add_category_auth"`  // who authorizes user permission to create category?
+	DelCategory     bool   `json:"del_category"`       // delete category
+	DelCategoryAuth string `json:"del_category_auth"`  // who authorized user permission to delete category?
 }
 
 func (Permission) TableName() string {

@@ -10,7 +10,7 @@ import (
 )
 
 // ReplyComment
-/// 回复评论
+/// reply to comment
 func ReplyComment(c *gin.Context) {
 	value := c.GetHeader("Authorization")
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
@@ -18,38 +18,38 @@ func ReplyComment(c *gin.Context) {
 	for rows.Next() {
 		var (
 			user    models.User
-			comment models.CommentTwo
-			one     models.Comment
+			reply   models.Reply
+			comment models.Comment
 		)
 
 		_ = vars.DB0.ScanRows(rows, &user)
-		_ = c.ShouldBindJSON(&comment)
-		affected := vars.DB0.Table("reply").Where(&models.Comment{Id: comment.Comment}, "id").Find(&one).RowsAffected
+		_ = c.ShouldBindJSON(&reply)
+		affected := vars.DB0.Table("reply").Where(&models.Comment{Id: reply.Comment}, "id").Find(&comment).RowsAffected
 
 		switch {
 		case !user.IsActive:
 			c.SecureJSON(403, gin.H{
-				"message": "账户未激活",
+				"message": "account isn't activated",
 			})
 
-		case len(comment.Content) > 300:
+		case len(reply.Content) > 300:
 			c.SecureJSON(411, gin.H{
-				"message": "评论内容过长",
+				"message": "reply content is too long",
 			})
 
 		case affected == 0:
 			c.SecureJSON(404, gin.H{
-				"message": fmt.Sprintf("评论不存在：%d", comment.Comment),
+				"message": fmt.Sprintf("comment \"%d\" isn't exist", reply.Comment),
 			})
 
 		default:
-			content := tools.WriteMd("./static/reply", comment.Content)
-			vars.DB0.Table("comment_two").Create(&models.CommentTwo{
-				Id:      tools.NewId(),
-				Comment: comment.Comment,
-				Content: content,
-				User:    user.Name,
-				Time:    time.Now().Format("2006-01-02 15:04:05"),
+			content := tools.WriteMd("./static/reply", reply.Content)
+			vars.DB0.Table("reply").Create(&models.Reply{
+				Id:        tools.NewId(),
+				Comment:   reply.Comment,
+				Content:   content,
+				User:      user.Name,
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			})
 
 			c.SecureJSON(200, nil)

@@ -15,8 +15,7 @@ type token struct {
 }
 
 // Create
-/// id 签发标识,userId
-/// name 签发人,userName
+/// generate token
 func Create(id int64, name string) string {
 	claims := &token{
 		Id:      id,
@@ -32,7 +31,7 @@ func Create(id int64, name string) string {
 }
 
 // parse
-/// 解析token的方法
+/// method of parsing token
 func parse(str string) (claims jwt.Claims) {
 	var token *jwt.Token
 	token, _ = jwt.Parse(str, func(token *jwt.Token) (interface{}, error) {
@@ -43,7 +42,7 @@ func parse(str string) (claims jwt.Claims) {
 }
 
 // Parse
-/// 解析token,并返回id
+/// parsing token and return user's id
 func Parse(value string) interface{} {
 	parse := parse(value)
 	id := parse.(jwt.MapClaims)["id"]

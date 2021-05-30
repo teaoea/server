@@ -34,12 +34,12 @@ func Password(c *gin.Context) {
 
 		case decodePWD != nil || password.Password1 != password.Password2:
 			c.SecureJSON(403, gin.H{
-				"message": "密码错误",
+				"message": "wrong password",
 			})
 
 		case len(password.Password2) < 8 && len(password.Password2) > 16:
 			c.SecureJSON(403, gin.H{
-				"message": "密码需要大于8位,小于16位",
+				"message": "password min 8 digits and max 16 digits",
 			})
 
 		default:
@@ -47,7 +47,7 @@ func Password(c *gin.Context) {
 			encodePWD := string(hash)
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("password", encodePWD)
 			c.SecureJSON(200, gin.H{
-				"message": "密码已修改完成",
+				"message": "modify password successfully",
 			})
 		}
 	}

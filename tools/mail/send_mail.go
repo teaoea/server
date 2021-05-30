@@ -9,9 +9,9 @@ import (
 
 // SendMail example:
 //	to = "recipient@example.com"
-// 	subject = "标题"
+// 	subject = "subject"
 //	html = <h1>Hello World</h1>
-//	return @false 发送失败 @true 发送成功
+//	return @false send failed @true send successfully
 func SendMail(to, subject, html string) bool {
 	e := mail.NewSMTPClient()
 	e.Host = vars.MailSmtp

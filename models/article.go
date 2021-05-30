@@ -20,17 +20,17 @@ func (UploadedImg) TableName() string {
 
 type Article struct {
 	Id        int64
-	Title     string `json:"title"`    // 标题
-	Content   string `json:"content"`  // 内容
-	Img       string `json:"img"`      // 封面图
-	Category  string `json:"category"` // 分类
-	Show      bool   `json:"show"`     // 文章属性 true: 公开 false: 私有
-	View      int64  `json:"view"`     // 阅读量
-	SHA256    string // 文章sha256校验和
-	Author    string `json:"author"`  // 作者
-	License   string `json:"license"` // 许可协议
-	IsHide    bool   // 文章是否被拉黑 true: 拉黑 false: No
-	CreatedAt string `json:"created_at"` // 创建时间
+	Title     string `json:"title"`    // subject
+	Content   string `json:"content"`  // content
+	Img       string `json:"img"`      // img
+	Category  string `json:"category"` // category
+	Show      bool   `json:"show"`     // is the article public,public: true,private: false
+	View      int64  `json:"view"`     // number of read
+	SHA256    string // article sha256 checksum
+	Author    string `json:"author"`  // author
+	License   string `json:"license"` // license
+	IsHide    bool   // whether the article is hidden, hidden: true, isn't hidden: false,default: false
+	CreatedAt string `json:"created_at"` // created time
 }
 
 func (Article) TableName() string {
@@ -38,25 +38,25 @@ func (Article) TableName() string {
 }
 
 type Comment struct {
-	Id      int64
-	Title   int64  `json:"title"`   // 文章
-	User    string `json:"user"`    // 用户
-	Content string `json:"content"` // 内容
-	Time    string `json:"time"`    // 时间
+	Id        int64
+	Title     int64  `json:"title"`      // article
+	User      string `json:"user"`       // user
+	Content   string `json:"content"`    // content
+	CreatedAt string `json:"created_at"` // created time
 }
 
 func (Comment) TableName() string {
 	return "comment"
 }
 
-type CommentTwo struct {
-	Id      int64
-	Comment int64  `json:"comment"` // 上级评论
-	User    string `json:"user"`    // 用户
-	Content string `json:"content"` // 内容
-	Time    string `json:"time"`    // 时间
+type Reply struct {
+	Id        int64
+	Comment   int64  `json:"comment"`    // comment
+	User      string `json:"user"`       // user
+	Content   string `json:"content"`    // content
+	CreatedAt string `json:"created_at"` // created time
 }
 
-func (CommentTwo) TableName() string {
-	return "comment_two"
+func (Reply) TableName() string {
+	return "reply"
 }

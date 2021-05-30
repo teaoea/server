@@ -19,7 +19,7 @@ func WriteArticle(c *gin.Context) {
 			user    models.User
 			article struct {
 				models.Article
-				Status bool `json:"status"` // 文章状态 ture: 完成 false: 草稿
+				Status bool `json:"status"` // article status, ture: success false: draft
 			}
 		)
 
@@ -27,13 +27,13 @@ func WriteArticle(c *gin.Context) {
 		_ = c.ShouldBindJSON(&article)
 		if !user.IsActive {
 			c.SecureJSON(403, gin.H{
-				"message": "账户未激活",
+				"message": "account isn't activated",
 			})
 			return
 		}
 		if len(article.Title) > 90 || article.Title == "" {
 			c.SecureJSON(411, gin.H{
-				"message": "标题过长",
+				"message": "subject is too long",
 			})
 			return
 		}
@@ -42,7 +42,7 @@ func WriteArticle(c *gin.Context) {
 		caCheck := vars.DB0.Table("category").Where(&models.Category{Name: article.Category}, "name").Find(&ca).RowsAffected
 		if caCheck == 0 {
 			c.SecureJSON(404, gin.H{
-				"message": fmt.Sprintf("类别'%s'不存在", article.Category),
+				"message": fmt.Sprintf("category \"%s\" isn't exist", article.Category),
 			})
 			return
 		}
@@ -64,7 +64,7 @@ func WriteArticle(c *gin.Context) {
 			}
 			vars.DB0.Table("draft").Create(&a)
 			c.SecureJSON(200, gin.H{
-				"message": "文章已保存到草稿箱",
+				"message": "the article has been saved to the draft box",
 			})
 		default:
 			a := models.Article{
@@ -82,7 +82,7 @@ func WriteArticle(c *gin.Context) {
 			}
 			vars.DB0.Table("article").Create(&a)
 			c.SecureJSON(200, gin.H{
-				"message": "文章已发布",
+				"message": "the article has been published",
 			})
 		}
 	}

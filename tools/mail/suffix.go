@@ -13,8 +13,8 @@ func SuffixCheck(email string) bool {
 		Suffix string
 	}
 
-	addr := strings.Split(email, "@") // 字符串分割
-	suf := "@" + addr[1]              // 截取邮箱后缀
+	addr := strings.Split(email, "@") // string segmentation
+	suf := "@" + addr[1]              // intercept email address suffix
 	filter := bson.D{
 		bson.E{Key: "suffix", Value: suf},
 	}

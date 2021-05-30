@@ -14,7 +14,7 @@ import (
 )
 
 // Server
-/// 日志中间件,访问日志保存到mongodb
+/// access log save to mongodb
 func Server() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
@@ -35,7 +35,8 @@ func Server() gin.HandlerFunc {
 	}
 }
 
-// Authorization  未登录无权访问的路由组
+// Authorization
+/// not sign in don't access router group
 func Authorization() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -51,7 +52,7 @@ func Authorization() gin.HandlerFunc {
 
 			if result != value {
 				c.JSON(403, gin.H{
-					"message": "登录已过期,请重新登录",
+					"message": "not sign in, please sign in and visit again",
 				})
 			} else {
 				c.Next()
@@ -89,7 +90,8 @@ func ipCheck(ip string) bool {
 	return val != mongo.ErrNoDocuments
 }
 
-// ProxyAuth 不是指定IP,无权访问的路由组
+// ProxyAuth
+/// Route group that can't be accessed without specifying ip
 func ProxyAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 

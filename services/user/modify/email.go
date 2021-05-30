@@ -32,24 +32,26 @@ func Email(c *gin.Context) {
 		affected := vars.DB0.Table("user").Where(&models.User{Email: email.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
 			c.SecureJSON(http.StatusUnauthorized, gin.H{
-				"message": fmt.Sprintf("邮箱'%s'已注册", email.Email),
+				"message": fmt.Sprintf("email address \"%s\" is already used", email.Email),
 			})
 			return
 		}
 
 		if !mail.SuffixCheck(email.Email) {
-			addr := strings.Split(email.Email, "@") // 字符串分割
-			suffix := "@" + addr[1]                 // 截取邮箱后缀
+			addr := strings.Split(email.Email, "@") // string segmentation
+			suffix := "@" + addr[1]                 // intercept email address suffix
 			c.SecureJSON(http.StatusForbidden, gin.H{
-				"message": fmt.Sprintf("此邮箱后缀'%s'无法绑定账户", suffix),
+				"message": fmt.Sprintf("the suffix \"%s\" of this email address can't be bound to the account", suffix),
 			})
 			return
 		}
 
-		// 修改邮箱和邮箱状态
+		// modify email address
 		vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email", email.Email)
+		// modify email address status
 		vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email_active", false)
-		// 如果手机号未激活,修改账户状态为未激活
+		// if the phone number isn't activated,
+		// modify account status to not activated
 		if !user.NumberActive {
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
 		}

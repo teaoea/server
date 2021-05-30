@@ -10,12 +10,12 @@ import (
 )
 
 // CommentArticle
-/// 评论无法删除
+/// user can't delete their own comment
 func CommentArticle(c *gin.Context) {
 	value := c.GetHeader("Authorization")
 	id := tools.Parse(value)
 	if id == 0 {
-		c.SecureJSON(403, "登录过期,请重新登录")
+		c.SecureJSON(403, "not sign in,please sign in and visit again")
 		return
 	}
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
@@ -33,27 +33,27 @@ func CommentArticle(c *gin.Context) {
 
 		case !user.IsActive:
 			c.SecureJSON(403, gin.H{
-				"message": "账户未激活",
+				"message": "account isn't activated",
 			})
 
 		case len(comment.Content) > 300:
 			c.SecureJSON(411, gin.H{
-				"message": "评论内容过长",
+				"message": "comment content is too long",
 			})
 
 		case affected == 0:
 			c.SecureJSON(404, gin.H{
-				"message": fmt.Sprintf("文章不存在：%d", comment.Title),
+				"message": fmt.Sprintf("article \"%d\" don't exist", comment.Title),
 			})
 
 		default:
 			content := tools.WriteMd("./static/comment", comment.Content)
 			vars.DB0.Table("comment").Create(&models.Comment{
-				Id:      tools.NewId(),
-				Title:   comment.Title,
-				Content: content,
-				User:    user.Name,
-				Time:    time.Now().Format("2006-01-02 15:04:05"),
+				Id:        tools.NewId(),
+				Title:     comment.Title,
+				Content:   content,
+				User:      user.Name,
+				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			})
 
 			c.SecureJSON(200, nil)

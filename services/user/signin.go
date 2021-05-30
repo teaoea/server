@@ -27,7 +27,7 @@ func SignIn(c *gin.Context) {
 
 	if nameCheck == 0 {
 		c.SecureJSON(404, gin.H{
-			"message": fmt.Sprintf("用户'%s'未注册", login.Name),
+			"message": fmt.Sprintf("user \"%s\" isn't sign up", login.Name),
 		})
 		return
 	}
@@ -53,7 +53,7 @@ func SignIn(c *gin.Context) {
 			return
 		}
 		c.SecureJSON(403, gin.H{
-			"message": "密码错误",
+			"message": "wrong password",
 		})
 	}
 }

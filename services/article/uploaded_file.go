@@ -8,7 +8,7 @@ import (
 )
 
 type uploadedFile struct {
-	Img string `json:"img"` // 前端上传文件路径
+	Img string `json:"img"` // file uploaded path
 }
 
 func UploadedFile(c *gin.Context) {
@@ -33,7 +33,7 @@ func UploadedFile(c *gin.Context) {
 		vars.DB0.Table("uploaded_img").Create(&img)
 
 		c.JSON(200, gin.H{
-			"message": "图片上传成功",
+			"message": "file uploaded successfully",
 		})
 	}
 }

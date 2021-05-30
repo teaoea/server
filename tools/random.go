@@ -18,8 +18,7 @@ const (
 )
 
 // RandomDig
-/// @params length 长度
-/// return 生成指定长度的数字
+/// generate a number of the specified length
 func RandomDig(length int) string {
 	b := make([]byte, length)
 	for i := range b {
@@ -29,8 +28,7 @@ func RandomDig(length int) string {
 }
 
 // RandomStr
-/// @params length 长度
-/// return 生成指定长度的字符串
+/// generate a string of the specified length
 func RandomStr(length int) string {
 	b := make([]byte, length)
 	for i, cache, remain := length-1, rand.Int63(), idxMax; i >= 0; {

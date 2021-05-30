@@ -30,7 +30,7 @@ func Active(c *gin.Context) {
 
 		if active.Code != value {
 			c.SecureJSON(403, gin.H{
-				"message": "验证码错误",
+				"message": "verification code error",
 			})
 			return
 		}
@@ -38,7 +38,7 @@ func Active(c *gin.Context) {
 		vars.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("email_active", true) // 邮箱激活
 		vars.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("is_active", true)    // 账户激活
 		c.SecureJSON(200, gin.H{
-			"message": fmt.Sprintf("电子邮件地址%s已激活", user.Email),
+			"message": fmt.Sprintf("email address \"%s\" being active", user.Email),
 		})
 	}
 }

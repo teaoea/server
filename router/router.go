@@ -15,53 +15,54 @@ func Router() *gin.Engine {
 	router := gin.New()
 	router.Use(Server(), Cor())
 	v1 := router.Group("/v1")
-	v1.GET("/category", article.CategoryList) // 分类列表
+	v1.GET("/category", article.CategoryList)
 	{
 		accountGroup := v1.Group("/account")
 		{
-			accountGroup.POST("/signup", user.SignUp)         //注册
-			accountGroup.POST("/signin", user.SignIn)         //登录
-			accountGroup.GET("/me", user.Me, Authorization()) //个人中心
+			accountGroup.POST("/signup", user.SignUp)
+			accountGroup.POST("/signin", user.SignIn)
+			accountGroup.GET("/me", user.Me, Authorization())
 
 			emailGroup := accountGroup.Group("/email", Authorization())
 			{
-				emailGroup.GET("sendcode", email.SendCode) //邮箱验证码发送
-				emailGroup.POST("/active", email.Active)   //邮箱激活
+				emailGroup.GET("sendcode", email.SendCode)
+				emailGroup.POST("/active", email.Active)
 			}
 
 			modifyGroup := accountGroup.Group("/modify", Authorization())
 			{
-				modifyGroup.POST("/password", modify.Password) //修改密码
-				modifyGroup.POST("/email", modify.Email)       //修改邮箱
-				modifyGroup.POST("/profile", modify.Profile)   //修改个人信息
+				modifyGroup.POST("/password", modify.Password)
+				modifyGroup.POST("/email", modify.Email)
+				modifyGroup.POST("/profile", modify.Profile)
 			}
 
 			oauthGroup := accountGroup.Group("/oauth", Authorization())
 			{
-				oauthGroup.POST("/github", oauth.Github) //github账户绑定
+				oauthGroup.POST("/github", oauth.Github)
 			}
 		}
 
-		Article := v1.Group("/article", Authorization())
+		articleGroup := v1.Group("/article", Authorization())
 		{
-			Article.POST("/write", article.WriteArticle)     // 编写文章
-			Article.POST("/comment", article.CommentArticle) // 编写评论
-			Article.POST("/comments", article.ReplyComment)  // 回复评论
+			articleGroup.POST("/write", article.WriteArticle)
+			articleGroup.POST("/comment", article.CommentArticle)
+			articleGroup.POST("/comments", article.ReplyComment)
 		}
 
-		upload := v1.Group("/uploaded", Authorization())
+		uploadGroup := v1.Group("/uploaded", Authorization())
 		{
-			upload.POST("/img", article.UploadedFile) // 上传图片
+			uploadGroup.POST("/img", article.UploadedFile)
 		}
 
-		Permission := v1.Group("/permission", ProxyAuth(), Authorization())
+		permissionGroup := v1.Group("/permission", ProxyAuth(), Authorization())
 		{
-			Permission.POST("/article", permission.HideArticle) // 隐藏文章
+			permissionGroup.POST("/article", permission.HideArticle)
 		}
 
-		Angular := v1.Group("/angular")
+		angularGroup := v1.Group("/angular")
 		{
-			Angular.POST("/error", angular.Error) // angular错误日志收集
+			angularGroup.POST("/error", angular.Error)
+			angularGroup.GET("/signin_guard", angular.SigninGuard)
 		}
 	}
 	return router

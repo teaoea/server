@@ -28,17 +28,19 @@ func HideArticle(c *gin.Context) {
 		switch {
 		case user.IsAdmin == false:
 			c.SecureJSON(403, gin.H{
-				"message": "无权执行此操作",
+				"message": "not authorized to perform this operation",
 			})
 
 		case nameCheck == 0:
 			c.SecureJSON(404, gin.H{
-				"message": fmt.Sprintf("用户%s不存在", hide.Name),
+				"message": fmt.Sprintf("user \"%s\" isn't exist", hide.Name),
 			})
 
 		case hide.Name != "":
 			var permission models.Permission
-			// 查询是否已经创建记录,已创建记录就执行更新操作,未创建,执行创建操作
+			// query whether the record has been created,
+			// perform the update operation when the record has been created,
+			// and perform the creation operation if it isn't created
 			rowsAffected := vars.DB0.Table("permission").Where(&models.Permission{Name: hide.Name}).Find(&permission).RowsAffected
 
 			if rowsAffected == 1 {
@@ -47,7 +49,7 @@ func HideArticle(c *gin.Context) {
 					HideArticleAuth: user.Name,
 				})
 				c.SecureJSON(200, gin.H{
-					"message": fmt.Sprintf("用户%s隐藏文章的权限已修改为:%v", user.Name, hide.HideArticle),
+					"message": fmt.Sprintf("user \"%s\"'s permission to hide articles has been modified to \"%v\"", user.Name, hide.HideArticle),
 				})
 			} else {
 				permission := models.Permission{
@@ -58,7 +60,7 @@ func HideArticle(c *gin.Context) {
 				}
 				vars.DB0.Table("permission").Create(&permission)
 				c.SecureJSON(200, gin.H{
-					"message": fmt.Sprintf("用户%s隐藏文章的权限已修改为:%v", user.Name, hide.HideArticle),
+					"message": fmt.Sprintf("The permission of user \"%s\" to hide articles has been modified to \"%v\"", user.Name, hide.HideArticle),
 				})
 			}
 		}

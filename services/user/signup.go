@@ -33,36 +33,36 @@ func SignUp(c *gin.Context) {
 
 	switch {
 
-	case register.Password != register.Password2: // 校验密码是否一致
+	case register.Password != register.Password2:
 		c.SecureJSON(403, gin.H{
-			"message": "两次输入的密码不一致",
+			"message": "The two passwords entered are inconsistent",
 		})
 
-	case len(register.Password2) < 8 || len(register.Password2) > 32: // 校验密码是否安全
+	case len(register.Password2) < 8 || len(register.Password2) > 32:
 		c.SecureJSON(403, gin.H{
-			"message": "密码需要大于8位,小于16位",
+			"message": "password min 8 digits and max 16 digits",
 		})
 
-	case !mail.SuffixCheck(register.Email): // 校验电子邮件服务商是否运行注册
-		addr := strings.Split(register.Email, "@") // 字符串分割
-		suffix := "@" + addr[1]                    // 截取邮箱后缀
+	case !mail.SuffixCheck(register.Email):
+		addr := strings.Split(register.Email, "@")
+		suffix := "@" + addr[1]
 		c.SecureJSON(403, gin.H{
-			"message": fmt.Sprintf("邮箱后缀%s无法用于注册", suffix),
+			"message": fmt.Sprintf("email suffix \"%s\" can't be sign up", suffix),
 		})
 
-	case nameCheck != 0 || register.Name == "": // 校验用户名是否已被注册
+	case nameCheck != 0 || register.Name == "":
 		c.SecureJSON(403, gin.H{
-			"message": fmt.Sprintf("用户名%s已被注册", register.Name),
+			"message": fmt.Sprintf("username \"%s\" can't be sign up", register.Name),
 		})
 
-	case emailCheck != 0 || register.Email == "": // 校验电子邮件地址是否已被注册
+	case emailCheck != 0 || register.Email == "":
 		c.SecureJSON(403, gin.H{
-			"message": fmt.Sprintf("电子邮件地址%s已被注册", register.Email),
+			"message": fmt.Sprintf("email \"%s\" can't be sign up", register.Email),
 		})
 
-	case numberCheck != 0 || register.Number == "": // 校验手机号是否已被注册
+	case numberCheck != 0 || register.Number == "":
 		c.SecureJSON(403, gin.H{
-			"message": fmt.Sprintf("手机号%s已被注册", register.Number),
+			"message": fmt.Sprintf("phone number \"%s\" can't be sign up", register.Number),
 		})
 
 	default:
@@ -79,8 +79,6 @@ func SignUp(c *gin.Context) {
 		}
 
 		vars.DB0.Table("user").Create(&user)
-		c.SecureJSON(200, gin.H{
-			"message": fmt.Sprintf("%s已完成注册", register.Name),
-		})
+		c.SecureJSON(200, nil)
 	}
 }

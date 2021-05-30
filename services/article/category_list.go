@@ -12,7 +12,8 @@ type category struct {
 	Name string `json:"name"`
 }
 
-// CategoryList  返回分类列表
+// CategoryList
+/// return category list
 func CategoryList(ctx *gin.Context) {
 	rows, _ := vars.DB0.Table("category").Model(&models.Category{}).Rows()
 	for rows.Next() {
