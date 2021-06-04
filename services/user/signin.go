@@ -38,15 +38,15 @@ func SignIn(c *gin.Context) {
 		var user models.User
 		_ = vars.DB0.ScanRows(rows, &user)
 		/*
-			encodePWD 获取数据库中已加密的密码
-			decodePWD 校验密码是否正确
+			encodePWD get the encrypted password in the database
+			decodePWD verify that the password is correct
 		*/
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
 		if decodePWD == nil {
 			value := tools.Create(user.Id, user.Name)
 
 			vars.RedisToken.Set(context.Background(), strconv.FormatInt(user.Id, 10), value, time.Hour*168)
-			// 返回token
+			// return token
 			c.SecureJSON(200, gin.H{
 				"message": value,
 			})

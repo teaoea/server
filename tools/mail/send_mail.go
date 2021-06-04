@@ -7,7 +7,8 @@ import (
 	"time"
 )
 
-// SendMail example:
+// SendMail
+//example:
 //	to = "recipient@example.com"
 // 	subject = "subject"
 //	html = <h1>Hello World</h1>

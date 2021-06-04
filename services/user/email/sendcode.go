@@ -24,7 +24,7 @@ func SendCode(c *gin.Context) {
 			to := user.Email                       //recipient email address
 			subject := "Verify your email address" // email subject
 			code := tools.RandomDig(7)             // verification code
-			// email content, you can use html syntax, verification code use tag with "strong", accessibility service
+			// email content, you can use html, verification code use tag with "strong", accessibility service
 			html := fmt.Sprintf("<h1>Hello,%s,verify your email address</h1>\n", user.Name) +
 				fmt.Sprintf("<h3>You use %s to sign in an account. To verify that this email address belongs to you, please enter the verification code below in the verification code input box. The verification code is valid for 5 minutes!!!\n", user.Email) +
 				fmt.Sprintf("<h2><strong>%s</strong></h2>", code) +
