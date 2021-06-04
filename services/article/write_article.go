@@ -58,7 +58,7 @@ func WriteArticle(c *gin.Context) {
 				Show:      article.Show,
 				View:      0,
 				SHA256:    tools.Checksum(article.Content),
-				Author:    user.Name,
+				Author:    user.Username,
 				License:   article.License,
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			}
@@ -76,7 +76,7 @@ func WriteArticle(c *gin.Context) {
 				Show:      article.Show,
 				View:      0,
 				SHA256:    tools.Checksum(article.Content),
-				Author:    user.Name,
+				Author:    user.Username,
 				License:   article.License,
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			}

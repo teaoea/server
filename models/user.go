@@ -2,7 +2,7 @@ package models
 
 type User struct {
 	Id           int64  `json:"id"`
-	Name         string `json:"name" `
+	Username     string `json:"username"`
 	Password     string `json:"password"`
 	Email        string `json:"email" `
 	EmailActive  bool   `json:"email_active" `

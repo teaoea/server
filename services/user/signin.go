@@ -23,16 +23,16 @@ func SignIn(c *gin.Context) {
 	)
 
 	_ = c.ShouldBindJSON(&login)
-	nameCheck := vars.DB0.Table("user").Where("name = @name OR email = @name", sql.Named("name", login.Name)).Find(&user).RowsAffected
+	nameCheck := vars.DB0.Table("user").Where("name = @name OR email = @name", sql.Named("name", login.Username)).Find(&user).RowsAffected
 
 	if nameCheck == 0 {
 		c.SecureJSON(404, gin.H{
-			"message": fmt.Sprintf("user \"%s\" isn't sign up", login.Name),
+			"message": fmt.Sprintf("user \"%s\" isn't sign up", login.Username),
 		})
 		return
 	}
 
-	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("name = @name OR email = @name", sql.Named("name", login.Name)).Rows()
+	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("name = @name OR email = @name", sql.Named("name", login.Username)).Rows()
 
 	for rows.Next() {
 		var user models.User
@@ -43,7 +43,7 @@ func SignIn(c *gin.Context) {
 		*/
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(login.Password))
 		if decodePWD == nil {
-			value := tools.Create(user.Id, user.Name)
+			value := tools.Create(user.Id, user.Username)
 
 			vars.RedisToken.Set(context.Background(), strconv.FormatInt(user.Id, 10), value, time.Hour*168)
 			// return token

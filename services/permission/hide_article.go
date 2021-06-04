@@ -24,7 +24,7 @@ func HideArticle(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&hide)
 
-		nameCheck := vars.DB0.Table("user").Where(&models.User{Name: hide.Name}, "name").Find(&user).RowsAffected
+		nameCheck := vars.DB0.Table("user").Where(&models.User{Username: hide.Name}, "name").Find(&user).RowsAffected
 		switch {
 		case user.IsAdmin == false:
 			c.SecureJSON(403, gin.H{
@@ -46,21 +46,21 @@ func HideArticle(c *gin.Context) {
 			if rowsAffected == 1 {
 				vars.DB0.Table("permission").Model(&permission).Updates(models.Permission{
 					HideArticle:     hide.HideArticle,
-					HideArticleAuth: user.Name,
+					HideArticleAuth: user.Username,
 				})
 				c.SecureJSON(200, gin.H{
-					"message": fmt.Sprintf("user \"%s\"'s permission to hide articles has been modified to \"%v\"", user.Name, hide.HideArticle),
+					"message": fmt.Sprintf("user \"%s\"'s permission to hide articles has been modified to \"%v\"", user.Username, hide.HideArticle),
 				})
 			} else {
 				permission := models.Permission{
 					UserId:          hide.UserId,
 					Name:            hide.Name,
 					HideArticle:     hide.HideArticle,
-					HideArticleAuth: user.Name,
+					HideArticleAuth: user.Username,
 				}
 				vars.DB0.Table("permission").Create(&permission)
 				c.SecureJSON(200, gin.H{
-					"message": fmt.Sprintf("The permission of user \"%s\" to hide articles has been modified to \"%v\"", user.Name, hide.HideArticle),
+					"message": fmt.Sprintf("The permission of user \"%s\" to hide articles has been modified to \"%v\"", user.Username, hide.HideArticle),
 				})
 			}
 		}

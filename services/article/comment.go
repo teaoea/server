@@ -52,7 +52,7 @@ func CommentArticle(c *gin.Context) {
 				Id:        tools.NewId(),
 				Title:     comment.Title,
 				Content:   content,
-				User:      user.Name,
+				User:      user.Username,
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			})
 

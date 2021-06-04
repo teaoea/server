@@ -25,7 +25,7 @@ func SignUp(c *gin.Context) {
 	)
 	_ = c.ShouldBindJSON(&register)
 
-	nameCheck := vars.DB0.Table("user").Where(&models.User{Name: register.Name}, "name").Find(&user).RowsAffected
+	nameCheck := vars.DB0.Table("user").Where(&models.User{Username: register.Username}, "name").Find(&user).RowsAffected
 
 	emailCheck := vars.DB0.Table("user").Where(&models.User{Email: register.Email}, "email").Find(&user).RowsAffected
 
@@ -50,9 +50,9 @@ func SignUp(c *gin.Context) {
 			"message": fmt.Sprintf("email suffix \"%s\" can't be sign up", suffix),
 		})
 
-	case nameCheck != 0 || register.Name == "":
+	case nameCheck != 0 || register.Username == "":
 		c.SecureJSON(403, gin.H{
-			"message": fmt.Sprintf("username \"%s\" can't be sign up", register.Name),
+			"message": fmt.Sprintf("username \"%s\" can't be sign up", register.Username),
 		})
 
 	case emailCheck != 0 || register.Email == "":
@@ -71,7 +71,7 @@ func SignUp(c *gin.Context) {
 
 		user = models.User{
 			Id:        tools.NewId(),
-			Name:      register.Name,
+			Username:  register.Username,
 			Password:  encodePWD,
 			Email:     register.Email,
 			Number:    fmt.Sprintf("%s-%s", register.Country, register.Number),
