@@ -3,7 +3,7 @@ create table public."user"
     id            bigint                not null
         constraint user_pk
             primary key,
-    name          varchar               not null,
+    username      varchar               not null,
     password      varchar               not null,
     email         varchar               not null,
     number        varchar               not null,
@@ -27,7 +27,7 @@ create unique index user_id_uindex
     on public."user" (id);
 
 create unique index user_name_uindex
-    on public."user" (name);
+    on public."user" (username);
 
 create unique index user_number_uindex
     on public."user" (number);

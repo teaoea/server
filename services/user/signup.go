@@ -25,7 +25,7 @@ func SignUp(c *gin.Context) {
 	)
 	_ = c.ShouldBindJSON(&register)
 
-	nameCheck := vars.DB0.Table("user").Where(&models.User{Username: register.Username}, "name").Find(&user).RowsAffected
+	nameCheck := vars.DB0.Table("user").Where(&models.User{Username: register.Username}, "username").Find(&user).RowsAffected
 
 	emailCheck := vars.DB0.Table("user").Where(&models.User{Email: register.Email}, "email").Find(&user).RowsAffected
 

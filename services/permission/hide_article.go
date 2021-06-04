@@ -24,7 +24,7 @@ func HideArticle(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&hide)
 
-		nameCheck := vars.DB0.Table("user").Where(&models.User{Username: hide.Name}, "name").Find(&user).RowsAffected
+		nameCheck := vars.DB0.Table("user").Where(&models.User{Username: hide.Name}, "username").Find(&user).RowsAffected
 		switch {
 		case user.IsAdmin == false:
 			c.SecureJSON(403, gin.H{
