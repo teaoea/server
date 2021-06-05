@@ -19,10 +19,11 @@ func Query(c *gin.Context) {
 	_ = c.ShouldBindJSON(&query)
 
 	switch {
-	case query.Key == "" && query.Value == "":
+	case query.Key == "" || query.Value == "":
 		c.SecureJSON(200, gin.H{
 			"message": false,
 		})
+
 	default:
 		affected := vars.DB0.Table("user").Where(fmt.Sprintf("%s = %s", query.Key, query.Value)).RowsAffected
 		if affected == 0 {
