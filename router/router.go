@@ -21,6 +21,7 @@ func Router() *gin.Engine {
 		{
 			accountGroup.POST("/signup", user.SignUp)
 			accountGroup.POST("/signin", user.SignIn)
+			accountGroup.POST("/query", user.Query)
 			accountGroup.GET("/me", user.Me, Authorization())
 
 			emailGroup := accountGroup.Group("/email", Authorization())
