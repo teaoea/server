@@ -16,6 +16,7 @@ var (
 	MongoHttp         = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "log", "http")
 	MongoError        = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "log", "error")
 	MongoAngularError = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "angular", "error")
+	MongoQuery        = config.MongoClient(c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0], "conf", "query")
 
 	KeyToken = c.Key.Token
 
