@@ -1,10 +1,11 @@
 package modify
 
 import (
-	"github.com/gin-gonic/gin"
 	"server/config/vars"
 	"server/models"
 	"server/tools"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Profile(c *gin.Context) {

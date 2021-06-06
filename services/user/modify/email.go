@@ -2,13 +2,15 @@ package modify
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
 	"server/tools/mail"
-	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type modifyEmail struct {

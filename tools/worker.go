@@ -1,10 +1,11 @@
 package tools
 
 import (
-	"server/config"
-	"server/tools/mail"
 	"sync"
 	"time"
+
+	"server/config"
+	"server/tools/mail"
 )
 
 var (

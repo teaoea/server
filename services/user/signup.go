@@ -2,12 +2,13 @@ package user
 
 import (
 	"fmt"
+	"strings"
+	"time"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
 	"server/tools/mail"
-	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"

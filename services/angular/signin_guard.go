@@ -2,11 +2,13 @@ package angular
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
+	"strconv"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
-	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SigninGuard(c *gin.Context) {

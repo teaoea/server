@@ -2,10 +2,12 @@ package mail
 
 import (
 	"context"
+	"strings"
+
+	"server/config/vars"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"server/config/vars"
-	"strings"
 )
 
 func SuffixCheck(email string) bool {

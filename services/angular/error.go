@@ -3,11 +3,13 @@ package angular
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
+	"time"
+
 	"server/config/vars"
 	"server/tools"
-	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func Error(c *gin.Context) {

@@ -2,9 +2,11 @@ package tools
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"server/config/vars"
 	"time"
+
+	"server/config/vars"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 type token struct {

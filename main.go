@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"server/router"
 	"time"
+
+	"server/router"
 )
 
 func main() {

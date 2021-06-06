@@ -2,8 +2,10 @@ package tools
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
+
 	"server/config/vars"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func Err(position, reason string) {

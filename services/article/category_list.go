@@ -1,10 +1,12 @@
 package article
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
 	"server/config/vars"
 	"server/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 type category struct {

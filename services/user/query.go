@@ -3,11 +3,13 @@ package user
 import (
 	"context"
 	"fmt"
+
+	"server/config/vars"
+	"server/models"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"server/config/vars"
-	"server/models"
 )
 
 func check(key string) bool {

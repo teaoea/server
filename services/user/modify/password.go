@@ -1,11 +1,12 @@
 package modify
 
 import (
-	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"server/config/vars"
 	"server/models"
 	"server/tools"
+
+	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type modifyPassword struct {

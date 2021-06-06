@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
+	"time"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
-	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"

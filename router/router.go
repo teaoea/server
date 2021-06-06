@@ -1,7 +1,6 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
 	"server/services/angular"
 	"server/services/article"
 	"server/services/permission"
@@ -9,6 +8,8 @@ import (
 	"server/services/user/email"
 	"server/services/user/modify"
 	"server/services/user/oauth"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Router() *gin.Engine {

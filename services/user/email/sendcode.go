@@ -2,11 +2,13 @@ package email
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
 	"server/tools/mail"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SendCode(c *gin.Context) {
