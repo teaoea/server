@@ -1,7 +1,9 @@
 package email
 
 import (
+	"context"
 	"fmt"
+	"time"
 
 	"server/config/vars"
 	"server/models"
@@ -38,6 +40,7 @@ func SendCode(c *gin.Context) {
 					"message": fmt.Sprintf("failed to send mail to email address \"%s\"\n", user.Email),
 				})
 			} else {
+				_ = vars.RedisCode.Set(context.TODO(), user.Email, code, time.Minute*5)
 				c.SecureJSON(200, gin.H{
 					"message": fmt.Sprintf("the verification code has been sent to the email address \"%s\", please check the email!!!", user.Email),
 				})
