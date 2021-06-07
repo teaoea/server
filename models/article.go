@@ -20,7 +20,7 @@ func (UploadedImg) TableName() string {
 
 type Article struct {
 	Id        int64
-	Title     string `json:"title"`    // subject
+	Title     string `json:"title"`    // title
 	Content   string `json:"content"`  // content
 	Img       string `json:"img"`      // img
 	Category  string `json:"category"` // category
