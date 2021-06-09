@@ -2,7 +2,6 @@ package angular
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"server/config/vars"
@@ -20,7 +19,7 @@ func Error(c *gin.Context) {
 	}
 	err := c.ShouldBindJSON(&e)
 	if err != nil {
-		tools.Err("services/angular/error.go", fmt.Sprintf("%s", err))
+		tools.Err("services/angular/error.go", err)
 		c.SecureJSON(503, nil)
 		return
 	}
@@ -32,7 +31,7 @@ func Error(c *gin.Context) {
 		bson.E{Key: "time", Value: time.Now().Format("2006-01-02 15:04:05")}, // 请求时间
 	})
 	if err != nil {
-		tools.Err("services/angular/error.go", fmt.Sprintf("%s", err))
+		tools.Err("services/angular/error.go", err)
 		c.SecureJSON(503, nil)
 		return
 	}

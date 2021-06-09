@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"fmt"
 	"time"
 
 	"server/config/vars"
@@ -27,7 +26,7 @@ func Create(id int64, name string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 	str, err := token.SignedString(vars.KeyToken)
 	if err != nil {
-		Err("Create", fmt.Sprintf("%s", err))
+		Err("Create", err)
 	}
 	return str
 }
