@@ -29,7 +29,6 @@ func WriteArticle(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&article)
 		affected := vars.DB0.Table("category").Where(&models.Category{Name: article.Category}, "name").Find(&category).RowsAffected
-		content := tools.WriteMd(fmt.Sprintf("./static/article/%d", user.Id), article.Content)
 
 		switch {
 		case !user.IsActive:
@@ -50,6 +49,7 @@ func WriteArticle(c *gin.Context) {
 			})
 		default:
 			if !article.Status {
+				content := tools.WriteMd(fmt.Sprintf("./static/article/draft/%d", user.Id), article.Content)
 				a := models.Article{
 					Id:        tools.NewId(),
 					Title:     article.Title,
@@ -68,6 +68,7 @@ func WriteArticle(c *gin.Context) {
 					"message": "the article has been saved to the draft box",
 				})
 			} else {
+				content := tools.WriteMd(fmt.Sprintf("./static/article/%d", user.Id), article.Content)
 				a := models.Article{
 					Id:        tools.NewId(),
 					Title:     article.Title,
