@@ -26,8 +26,8 @@ func check(key string) bool {
 // Query
 /// user table public query api
 /// return
-/// false: can't pass
-/// true: pass
+/// true: this record exists
+/// false: This record doesn't exists
 func Query(c *gin.Context) {
 	var (
 		user  models.User
@@ -52,7 +52,7 @@ func Query(c *gin.Context) {
 
 	default:
 		affected := vars.DB0.Table("user").Where(fmt.Sprintf("%s = ?", query.Key), query.Value).Find(&user).RowsAffected
-		if affected == 0 {
+		if affected == 1 {
 			c.SecureJSON(200, gin.H{
 				"message": true,
 			})
