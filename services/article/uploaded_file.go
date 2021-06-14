@@ -33,8 +33,6 @@ func UploadedFile(c *gin.Context) {
 
 		vars.DB0.Table("uploaded_img").Create(&img)
 
-		c.JSON(200, gin.H{
-			"message": "file uploaded successfully",
-		})
+		c.JSON(200, nil)
 	}
 }

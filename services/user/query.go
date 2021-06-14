@@ -23,16 +23,12 @@ func check(key string) bool {
 	return val != mongo.ErrNoDocuments
 }
 
-// Query
-/// user table public query api
-/// return
-/// true: this record exists
-/// false: This record doesn't exists
+// Query user table public query api
 func Query(c *gin.Context) {
 	var (
 		user  models.User
 		query struct {
-			Key   string `json:"key"`   // field name
+			Field string `json:"field"` // field name
 			Value string `json:"value"` // the value to be queried
 		}
 	)
@@ -40,26 +36,18 @@ func Query(c *gin.Context) {
 	_ = c.ShouldBindJSON(&query)
 
 	switch {
-	case query.Key == "" || query.Value == "":
-		c.SecureJSON(200, gin.H{
-			"message": false,
-		})
+	case query.Field == "" || query.Value == "":
+		c.SecureJSON(452, nil)
 
-	case !check(query.Key):
-		c.SecureJSON(200, gin.H{
-			"message": false,
-		})
+	case !check(query.Field):
+		c.SecureJSON(453, nil)
 
 	default:
-		affected := vars.DB0.Table("user").Where(fmt.Sprintf("%s = ?", query.Key), query.Value).Find(&user).RowsAffected
+		affected := vars.DB0.Table("user").Where(fmt.Sprintf("%s = ?", query.Field), query.Value).Find(&user).RowsAffected
 		if affected == 1 {
-			c.SecureJSON(200, gin.H{
-				"message": true,
-			})
+			c.SecureJSON(230, nil)
 		} else {
-			c.SecureJSON(200, gin.H{
-				"message": false,
-			})
+			c.SecureJSON(231, nil)
 		}
 	}
 }

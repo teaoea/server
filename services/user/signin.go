@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -27,9 +26,7 @@ func SignIn(c *gin.Context) {
 	nameCheck := vars.DB0.Table("user").Where("username = @signin OR email = @signin", sql.Named("signin", login.Username)).Find(&user).RowsAffected
 
 	if nameCheck == 0 {
-		c.SecureJSON(404, gin.H{
-			"message": fmt.Sprintf("user \"%s\" isn't sign up", login.Username),
-		})
+		c.SecureJSON(452, nil)
 		return
 	}
 
@@ -53,8 +50,6 @@ func SignIn(c *gin.Context) {
 			})
 			return
 		}
-		c.SecureJSON(403, gin.H{
-			"message": "wrong password",
-		})
+		c.SecureJSON(453, nil)
 	}
 }

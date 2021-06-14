@@ -1,7 +1,6 @@
 package article
 
 import (
-	"fmt"
 	"time"
 
 	"server/config/vars"
@@ -30,19 +29,13 @@ func ReplyComment(c *gin.Context) {
 
 		switch {
 		case !user.IsActive:
-			c.SecureJSON(403, gin.H{
-				"message": "account isn't activated",
-			})
+			c.SecureJSON(452, nil)
 
 		case len(reply.Content) > 300:
-			c.SecureJSON(411, gin.H{
-				"message": "reply content is too long",
-			})
+			c.SecureJSON(453, nil)
 
 		case affected == 0:
-			c.SecureJSON(404, gin.H{
-				"message": fmt.Sprintf("comment \"%d\" isn't exist", reply.Comment),
-			})
+			c.SecureJSON(454, nil)
 
 		default:
 			content := tools.WriteMd("./static/reply", reply.Content)

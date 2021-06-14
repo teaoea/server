@@ -1,10 +1,6 @@
 package modify
 
 import (
-	"fmt"
-	"net/http"
-	"strings"
-
 	"server/config/vars"
 	"server/models"
 	"server/tools"
@@ -33,18 +29,14 @@ func Email(c *gin.Context) {
 
 		affected := vars.DB0.Table("user").Where(&models.User{Email: email.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
-			c.SecureJSON(http.StatusUnauthorized, gin.H{
-				"message": fmt.Sprintf("email address \"%s\" is already used", email.Email),
-			})
+			c.SecureJSON(452, nil)
 			return
 		}
 
 		if !mail.SuffixCheck(email.Email) {
-			addr := strings.Split(email.Email, "@") // string segmentation
-			suffix := "@" + addr[1]                 // intercept email address suffix
-			c.SecureJSON(http.StatusForbidden, gin.H{
-				"message": fmt.Sprintf("the suffix \"%s\" of this email address can't be bound to the account", suffix),
-			})
+			// addr := strings.Split(email.Email, "@") // string segmentation
+			// suffix := "@" + addr[1]                 // intercept email address suffix
+			c.SecureJSON(453, nil)
 			return
 		}
 
@@ -58,6 +50,6 @@ func Email(c *gin.Context) {
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
 		}
 
-		c.SecureJSON(http.StatusOK, nil)
+		c.SecureJSON(200, nil)
 	}
 }

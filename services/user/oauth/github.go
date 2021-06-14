@@ -34,8 +34,6 @@ func Github(c *gin.Context) {
 			Email:    g.Email,
 		}
 		vars.DB0.Table("github").Create(&github)
-		c.SecureJSON(200, gin.H{
-			"message": "github account binding successfully",
-		})
+		c.SecureJSON(200, nil)
 	}
 }

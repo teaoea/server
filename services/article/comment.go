@@ -1,7 +1,6 @@
 package article
 
 import (
-	"fmt"
 	"time"
 
 	"server/config/vars"
@@ -15,11 +14,6 @@ import (
 /// user can't delete their own comment
 func CommentArticle(c *gin.Context) {
 	value := c.GetHeader("Authorization")
-	id := tools.Parse(value)
-	if id == 0 {
-		c.SecureJSON(403, "not sign in,please sign in and visit again")
-		return
-	}
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
 	for rows.Next() {
 		var (
@@ -34,19 +28,13 @@ func CommentArticle(c *gin.Context) {
 		switch {
 
 		case !user.IsActive:
-			c.SecureJSON(403, gin.H{
-				"message": "account isn't activated",
-			})
+			c.SecureJSON(452, nil)
 
 		case len(comment.Content) > 300:
-			c.SecureJSON(411, gin.H{
-				"message": "comment content is too long",
-			})
+			c.SecureJSON(453, nil)
 
 		case affected == 0:
-			c.SecureJSON(404, gin.H{
-				"message": fmt.Sprintf("article \"%d\" don't exist", comment.Title),
-			})
+			c.SecureJSON(454, nil)
 
 		default:
 			content := tools.WriteMd("./static/comment", comment.Content)

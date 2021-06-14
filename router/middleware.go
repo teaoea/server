@@ -2,7 +2,6 @@ package router
 
 import (
 	"context"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -53,9 +52,8 @@ func Authorization() gin.HandlerFunc {
 			result, _ := vars.RedisToken.Get(context.Background(), strconv.FormatInt(user.Id, 10)).Result()
 
 			if result != value {
-				c.JSON(403, gin.H{
-					"message": "not sign in, please sign in and visit again",
-				})
+				c.JSON(401, nil)
+				return
 			} else {
 				c.Next()
 			}
@@ -98,12 +96,10 @@ func ProxyAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		ip := c.ClientIP()
-		switch {
-		case !ipCheck(ip):
-			c.JSON(403, gin.H{
-				"message": fmt.Sprintf("ip地址%s,无权限访问", ip),
-			})
-		default:
+		if !ipCheck(ip) {
+			c.JSON(407, nil)
+			return
+		} else {
 			c.Next()
 		}
 	}

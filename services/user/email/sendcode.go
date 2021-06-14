@@ -36,19 +36,13 @@ func SendCode(c *gin.Context) {
 				fmt.Sprintf("<h3>Someone uses this %s email address to register an account with <a href=\"https://www.teaoea.com\"> teaoea </a>. If you have not registered an account, please ignore this email.</h3>\n", user.Email)
 			err := mail.SendMail(to, subject, html)
 			if !err {
-				c.SecureJSON(403, gin.H{
-					"message": fmt.Sprintf("failed to send mail to email address \"%s\"\n", user.Email),
-				})
+				c.SecureJSON(452, nil)
 			} else {
 				_ = vars.RedisCode.Set(context.TODO(), user.Email, code, time.Minute*5)
-				c.SecureJSON(200, gin.H{
-					"message": fmt.Sprintf("the verification code has been sent to the email address \"%s\", please check the email!!!", user.Email),
-				})
+				c.SecureJSON(200, nil)
 			}
 		default:
-			c.SecureJSON(403, gin.H{
-				"message": "failed to send verification code",
-			})
+			c.SecureJSON(453, nil)
 		}
 	}
 }

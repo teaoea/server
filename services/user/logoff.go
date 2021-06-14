@@ -35,19 +35,13 @@ func SendEmail(c *gin.Context) {
 
 			err := mail.SendMail(to, subject, html)
 			if !err {
-				c.SecureJSON(403, gin.H{
-					"message": fmt.Sprintf("failed to send mail to email address \"%s\"", user.Email),
-				})
+				c.SecureJSON(452, nil)
 			} else {
 				vars.RedisLogoff.Set(context.TODO(), user.Email, code, time.Minute*5)
-				c.SecureJSON(200, gin.H{
-					"message": fmt.Sprintf("the verification code has been sent to the email address \"%s\", please check the email!!!", user.Email),
-				})
+				c.SecureJSON(200, nil)
 			}
 		default:
-			c.SecureJSON(403, gin.H{
-				"message": "failed to send verification code",
-			})
+			c.SecureJSON(453, nil)
 		}
 	}
 }
@@ -68,9 +62,7 @@ func Logoff(c *gin.Context) {
 		_ = c.ShouldBindJSON(&logoff)
 		value, _ := vars.RedisLogoff.Get(context.TODO(), user.Email).Result()
 		if logoff.Code != value {
-			c.SecureJSON(403, gin.H{
-				"message": "verification code error",
-			})
+			c.SecureJSON(454, nil)
 		} else {
 			// delete account
 			vars.DB0.Table("user").Delete(&models.User{}, user.Id)

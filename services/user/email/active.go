@@ -2,7 +2,6 @@ package email
 
 import (
 	"context"
-	"fmt"
 
 	"server/config/vars"
 	"server/models"
@@ -31,16 +30,12 @@ func Active(c *gin.Context) {
 		value, _ := vars.RedisCode.Get(context.Background(), user.Email).Result()
 
 		if active.Code != value {
-			c.SecureJSON(403, gin.H{
-				"message": "verification code error",
-			})
+			c.SecureJSON(452, nil)
 			return
 		}
 
 		vars.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("email_active", true) // 邮箱激活
 		vars.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("is_active", true)    // 账户激活
-		c.SecureJSON(200, gin.H{
-			"message": fmt.Sprintf("email address \"%s\" being active", user.Email),
-		})
+		c.SecureJSON(200, nil)
 	}
 }
