@@ -1,5 +1,3 @@
-<h1 style="text-align: center">使用GIN开发后端API服务</h1>
-
 ## Start
 
 1. create the file `config.yaml` in the root directory
@@ -37,9 +35,29 @@ redis:
 
 key:
   # the key to encrypt the token
-  token: 
+  token:
 
 ```
 
-2. create the database `conf`and the collection `suffixes` in the database,
-   and import the file `script/suffixes.json`
+2. mongo
+    * create the database `conf`and the collection `suffixes` in the database, and import the file `docs/suffixes.json`
+    * create the collection `query` in the database `conf` and import the file `docs/query.json`
+    * create the collection `ipaddr` in the database `conf` and import the file `docs/ip.json`
+
+3. postgres
+    * the postgresql database table file is saved in the `script` directory
+
+## Dependency
+
+1. database
+    * [postgresql](https://www.postgresql.org/)
+    * [mongo](https://www.mongodb.com/)
+    * [redis](https://redis.io/)
+
+2. library
+    * [gin](https://gin-gonic.com/)
+    * [gorm](https://gorm.io/)
+    * [go-redis](https://redis.uptrace.dev/)
+    * [go-simple-mail](https://github.com/xhit/go-simple-mail)
+    * [mongo-go-driver](https://github.com/mongodb/mongo-go-driver)
+    * [jwt-go](https://github.com/dgrijalva/jwt-go)
