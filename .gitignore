@@ -1,4 +1,3 @@
-# Created by .ignore support plugin (hsz.mobi)
 ### Go template
 # Binaries for programs and plugins
 *.exe
@@ -16,13 +15,6 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-.idea
 config.yaml
-
-
+.idea
 static
-key
-.vscode
-
-*test.go
-server
