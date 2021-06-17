@@ -28,13 +28,19 @@ func CommentArticle(c *gin.Context) {
 		switch {
 
 		case !user.IsActive:
-			c.SecureJSON(452, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1020,
+			})
 
 		case len(comment.Content) > 300:
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1024,
+			})
 
 		case affected == 0:
-			c.SecureJSON(454, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1025,
+			})
 
 		default:
 			content := tools.WriteMd("./static/comment", comment.Content)

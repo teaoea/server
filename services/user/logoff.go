@@ -35,13 +35,17 @@ func SendEmail(c *gin.Context) {
 
 			err := mail.SendMail(to, subject, html)
 			if !err {
-				c.SecureJSON(452, nil)
+				c.SecureJSON(200, gin.H{
+					"message": 1011,
+				})
 			} else {
 				vars.RedisLogoff.Set(context.TODO(), user.Email, code, time.Minute*5)
 				c.SecureJSON(200, nil)
 			}
 		default:
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1012,
+			})
 		}
 	}
 }
@@ -62,7 +66,9 @@ func Logoff(c *gin.Context) {
 		_ = c.ShouldBindJSON(&logoff)
 		value, _ := vars.RedisLogoff.Get(context.TODO(), user.Email).Result()
 		if logoff.Code != value {
-			c.SecureJSON(454, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1013,
+			})
 		} else {
 			// delete account
 			vars.DB0.Table("user").Delete(&models.User{}, user.Id)

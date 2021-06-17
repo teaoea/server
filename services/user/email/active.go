@@ -30,7 +30,9 @@ func Active(c *gin.Context) {
 		value, _ := vars.RedisCode.Get(context.Background(), user.Email).Result()
 
 		if active.Code != value {
-			c.SecureJSON(452, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1013,
+			})
 			return
 		}
 

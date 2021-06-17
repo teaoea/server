@@ -26,11 +26,15 @@ func HideArticle(c *gin.Context) {
 
 		nameCheck := vars.DB0.Table("user").Where(&models.User{Username: hide.Name}, "username").Find(&user).RowsAffected
 		switch {
-		case user.IsAdmin == false:
-			c.SecureJSON(452, nil)
+		case !user.IsAdmin:
+			c.SecureJSON(200, gin.H{
+				"message": 1028,
+			})
 
 		case nameCheck == 0:
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1029,
+			})
 
 		case hide.Name != "":
 			var permission models.Permission
@@ -38,13 +42,14 @@ func HideArticle(c *gin.Context) {
 			// perform the update operation when the record has been created,
 			// and perform the creation operation if it isn't created
 			rowsAffected := vars.DB0.Table("permission").Where(&models.Permission{Name: hide.Name}).Find(&permission).RowsAffected
-
+			// if the record exists, update it,
+			// if it doesn't exist, create it
 			if rowsAffected == 1 {
 				vars.DB0.Table("permission").Model(&permission).Updates(models.Permission{
 					HideArticle:     hide.HideArticle,
 					HideArticleAuth: user.Username,
 				})
-				c.SecureJSON(230, nil)
+				c.SecureJSON(200, nil)
 			} else {
 				permission := models.Permission{
 					UserId:          hide.UserId,
@@ -53,7 +58,7 @@ func HideArticle(c *gin.Context) {
 					HideArticleAuth: user.Username,
 				}
 				vars.DB0.Table("permission").Create(&permission)
-				c.SecureJSON(231, nil)
+				c.SecureJSON(200, nil)
 			}
 		}
 	}

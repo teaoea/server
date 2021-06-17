@@ -29,14 +29,18 @@ func Email(c *gin.Context) {
 
 		affected := vars.DB0.Table("user").Where(&models.User{Email: email.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
-			c.SecureJSON(452, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1018,
+			})
 			return
 		}
 
 		if !mail.SuffixCheck(email.Email) {
 			// addr := strings.Split(email.Email, "@") // string segmentation
 			// suffix := "@" + addr[1]                 // intercept email address suffix
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1019,
+			})
 			return
 		}
 

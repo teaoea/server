@@ -52,7 +52,9 @@ func Authorization() gin.HandlerFunc {
 			result, _ := vars.RedisToken.Get(context.Background(), strconv.FormatInt(user.Id, 10)).Result()
 
 			if result != value {
-				c.JSON(401, nil)
+				c.JSON(200, gin.H{
+					"message": 1001,
+				})
 				return
 			} else {
 				c.Next()
@@ -97,7 +99,9 @@ func ProxyAuth() gin.HandlerFunc {
 
 		ip := c.ClientIP()
 		if !ipCheck(ip) {
-			c.JSON(407, nil)
+			c.JSON(200, gin.H{
+				"message": 1002,
+			})
 			return
 		} else {
 			c.Next()

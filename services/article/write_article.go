@@ -32,14 +32,24 @@ func WriteArticle(c *gin.Context) {
 
 		switch {
 		case !user.IsActive:
-			c.SecureJSON(452, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1020,
+			})
 		case len(article.Title) >= 90:
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1021,
+			})
 		case article.Title == "":
-			c.SecureJSON(454, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1022,
+			})
 		case affected == 0:
-			c.SecureJSON(455, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1023,
+			})
 		default:
+			// false: save to the 'draft' table
+			// true: save to the 'article' table
 			if !article.Status {
 				content := tools.WriteMd(fmt.Sprintf("./static/article/draft/%d", user.Id), article.Content)
 				a := models.Article{
@@ -56,7 +66,9 @@ func WriteArticle(c *gin.Context) {
 					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 				}
 				vars.DB0.Table("draft").Create(&a)
-				c.SecureJSON(230, nil)
+				c.SecureJSON(200, gin.H{
+					"message": false,
+				})
 			} else {
 				content := tools.WriteMd(fmt.Sprintf("./static/article/%d", user.Id), article.Content)
 				a := models.Article{
@@ -73,7 +85,9 @@ func WriteArticle(c *gin.Context) {
 					CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 				}
 				vars.DB0.Table("article").Create(&a)
-				c.SecureJSON(231, nil)
+				c.SecureJSON(200, gin.H{
+					"message": true,
+				})
 			}
 		}
 	}

@@ -34,24 +34,36 @@ func SignUp(c *gin.Context) {
 	switch {
 
 	case register.Password != register.Password2:
-		c.SecureJSON(452, nil)
+		c.SecureJSON(200, gin.H{
+			"message": "1003",
+		})
 
 	case len(register.Password2) < 8 || len(register.Password2) > 32:
-		c.SecureJSON(453, nil)
+		c.SecureJSON(200, gin.H{
+			"message": 1004,
+		})
 
 	case !mail.SuffixCheck(register.Email):
 		// addr := strings.Split(register.Email, "@")
 		// suffix := "@" + addr[1]
-		c.SecureJSON(454, nil)
+		c.SecureJSON(200, gin.H{
+			"message": 1005,
+		})
 
 	case nameCheck != 0 || register.Username == "":
-		c.SecureJSON(455, nil)
+		c.SecureJSON(200, gin.H{
+			"message": 1006,
+		})
 
 	case emailCheck != 0 || register.Email == "":
-		c.SecureJSON(456, nil)
+		c.SecureJSON(200, gin.H{
+			"message": 1007,
+		})
 
 	case numberCheck != 0 || register.Number == "":
-		c.SecureJSON(457, nil)
+		c.SecureJSON(200, gin.H{
+			"message": 1008,
+		})
 
 	default:
 		hash, _ := bcrypt.GenerateFromPassword([]byte(register.Password2), bcrypt.DefaultCost) // 加密密码

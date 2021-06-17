@@ -24,11 +24,13 @@ func check(key string) bool {
 }
 
 // Query user table public query api
+// true: this record exists
+// false: this record doesn't exists
 func Query(c *gin.Context) {
 	var (
 		user  models.User
 		query struct {
-			Field string `json:"field"` // field name
+			Key   string `json:"key"`   // field name
 			Value string `json:"value"` // the value to be queried
 		}
 	)
@@ -36,18 +38,26 @@ func Query(c *gin.Context) {
 	_ = c.ShouldBindJSON(&query)
 
 	switch {
-	case query.Field == "" || query.Value == "":
-		c.SecureJSON(452, nil)
+	case query.Key == "" || query.Value == "":
+		c.SecureJSON(200, gin.H{
+			"message": 1014,
+		})
 
-	case !check(query.Field):
-		c.SecureJSON(453, nil)
+	case !check(query.Key):
+		c.SecureJSON(200, gin.H{
+			"message": 1015,
+		})
 
 	default:
-		affected := vars.DB0.Table("user").Where(fmt.Sprintf("%s = ?", query.Field), query.Value).Find(&user).RowsAffected
+		affected := vars.DB0.Table("user").Where(fmt.Sprintf("%s = ?", query.Key), query.Value).Find(&user).RowsAffected
 		if affected == 1 {
-			c.SecureJSON(230, nil)
+			c.SecureJSON(200, gin.H{
+				"message": true,
+			})
 		} else {
-			c.SecureJSON(231, nil)
+			c.SecureJSON(200, gin.H{
+				"message": false,
+			})
 		}
 	}
 }

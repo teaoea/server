@@ -25,7 +25,9 @@ func SigninGuard(c *gin.Context) {
 
 		result, _ := vars.RedisToken.Get(context.Background(), strconv.FormatInt(user.Id, 10)).Result()
 		if result != value {
-			c.JSON(452, nil)
+			c.JSON(200, gin.H{
+				"message": 1001,
+			})
 		} else {
 			c.JSON(200, nil)
 		}

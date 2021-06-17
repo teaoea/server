@@ -34,10 +34,14 @@ func Password(c *gin.Context) {
 		switch {
 
 		case decodePWD != nil || password.Password1 != password.Password2:
-			c.SecureJSON(452, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1010,
+			})
 
 		case len(password.Password2) < 8 && len(password.Password2) > 16:
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1004,
+			})
 
 		default:
 			hash, _ := bcrypt.GenerateFromPassword([]byte(password.Password2), bcrypt.DefaultCost) //加密处理

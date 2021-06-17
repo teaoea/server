@@ -29,13 +29,19 @@ func ReplyComment(c *gin.Context) {
 
 		switch {
 		case !user.IsActive:
-			c.SecureJSON(452, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1020,
+			})
 
 		case len(reply.Content) > 300:
-			c.SecureJSON(453, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1026,
+			})
 
 		case affected == 0:
-			c.SecureJSON(454, nil)
+			c.SecureJSON(200, gin.H{
+				"message": 1027,
+			})
 
 		default:
 			content := tools.WriteMd("./static/reply", reply.Content)
