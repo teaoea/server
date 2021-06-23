@@ -30,7 +30,7 @@ func Server() gin.HandlerFunc {
 				bson.E{Key: "delay", Value: time.Since(start) / 1e6},                 // 延迟
 				bson.E{Key: "status", Value: c.Writer.Status()},                      // 请求状态
 				bson.E{Key: "time", Value: time.Now().Format("2006-01-02 15:04:05")}, // 请求时间
-				bson.E{Key: "ipv4", Value: c.ClientIP()},                             // 客户端ip
+				bson.E{Key: "ipv4", Value: tools.ClientIp},                           // 客户端ip
 			})
 		}
 	}
