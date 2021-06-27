@@ -29,7 +29,9 @@ func SigninGuard(c *gin.Context) {
 				"message": 1001,
 			})
 		} else {
-			c.JSON(200, nil)
+			c.JSON(200, gin.H{
+				"message": user.Username,
+			})
 		}
 	}
 }
