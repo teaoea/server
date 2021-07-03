@@ -42,24 +42,29 @@ var (
 		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
 		c.Mongo.Port[0], "conf", "query",
 	)
+
 	MongoHttp = config.MongoClient(
 		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0], c.Mongo.Port[0],
-		fmt.Sprintf(
-			"log-%d-%d-%d", time.Now().Year(), time.Now().Month(), time.Now().Day(),
-		),
-		fmt.Sprintf(
-			"%d-%d", time.Now().Hour(), time.Now().Minute(),
+		"log", fmt.Sprintf("%d-%d-%d,%d:%d",
+			time.Now().Year(), time.Now().Month(), time.Now().Day(),
+			time.Now().Hour(), time.Now().Minute(),
 		),
 	)
 
 	MongoError = config.MongoClient(
 		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
-		c.Mongo.Port[0], "log", "error",
+		c.Mongo.Port[0], "error", fmt.Sprintf("%d-%d-%d,%d:%d",
+			time.Now().Year(), time.Now().Month(), time.Now().Day(),
+			time.Now().Hour(), time.Now().Minute(),
+		),
 	)
 
 	MongoAngularError = config.MongoClient(
 		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
-		c.Mongo.Port[0], "angular", "error",
+		c.Mongo.Port[0], "angular-error", fmt.Sprintf("%d-%d-%d,%d:%d",
+			time.Now().Year(), time.Now().Month(), time.Now().Day(),
+			time.Now().Hour(), time.Now().Minute(),
+		),
 	)
 
 	KeyToken = c.Key.Token
