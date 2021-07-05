@@ -3,6 +3,8 @@
 1. create the file `config.yaml` in the root directory
 
 ```yaml
+addr:  # port
+
 postgresql:
   user: [ ]
   password: [ ]

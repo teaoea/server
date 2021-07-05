@@ -11,6 +11,8 @@ var (
 	conf config.Config
 	c    = conf.Yaml()
 
+	Addr = c.Addr
+
 	DB0 = config.PostgresqlClient(
 		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0],
 		c.Postgresql.Port[0], c.Postgresql.Name[0],

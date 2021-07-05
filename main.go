@@ -9,12 +9,13 @@ import (
 	"os/signal"
 	"time"
 
+	"server/config/vars"
 	"server/router"
 )
 
 func main() {
 	srv := &http.Server{
-		Addr:         ":1033",
+		Addr:         vars.Addr,
 		Handler:      router.Router(),
 		ReadTimeout:  time.Second * 10,
 		WriteTimeout: time.Second * 10,
