@@ -28,18 +28,18 @@ func CommentArticle(c *gin.Context) {
 		switch {
 
 		case !user.IsActive:
-			c.SecureJSON(200, gin.H{
-				"message": 1020,
+			c.SecureJSON(460, gin.H{
+				"message": "Account isn't activated",
 			})
 
 		case len(comment.Content) > 300:
-			c.SecureJSON(200, gin.H{
-				"message": 1024,
+			c.SecureJSON(461, gin.H{
+				"message": "Comment content is too long",
 			})
 
 		case affected == 0:
 			c.SecureJSON(200, gin.H{
-				"message": 1025,
+				"message": "Article don't exist",
 			})
 
 		default:
@@ -52,7 +52,9 @@ func CommentArticle(c *gin.Context) {
 				CreatedAt: time.Now().Format("2006-01-02 15:04:05"),
 			})
 
-			c.SecureJSON(200, nil)
+			c.SecureJSON(200, gin.H{
+				"message": "Make a comment successfully",
+			})
 		}
 	}
 }

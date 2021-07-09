@@ -22,7 +22,7 @@ func WriteArticle(c *gin.Context) {
 			category models.Category
 			article  struct {
 				models.Article
-				Status bool `json:"status"` // article status, ture: success false: draft
+				Save string `json:"save"`
 			}
 		)
 
@@ -32,25 +32,24 @@ func WriteArticle(c *gin.Context) {
 
 		switch {
 		case !user.IsActive:
-			c.SecureJSON(200, gin.H{
-				"message": 1020,
+			c.SecureJSON(460, gin.H{
+				"message": "The account isn't activated",
 			})
 		case len(article.Title) >= 90:
-			c.SecureJSON(200, gin.H{
-				"message": 1021,
+			c.SecureJSON(461, gin.H{
+				"message": "The title is too long",
 			})
 		case article.Title == "":
-			c.SecureJSON(200, gin.H{
-				"message": 1022,
+			c.SecureJSON(462, gin.H{
+				"message": "The title can't be blank",
 			})
 		case affected == 0:
-			c.SecureJSON(200, gin.H{
-				"message": 1023,
+			c.SecureJSON(463, gin.H{
+				"message": "The category isn't exist",
 			})
 		default:
-			// false: save to the 'draft' table
-			// true: save to the 'article' table
-			if !article.Status {
+			switch article.Save {
+			case "draft":
 				content := tools.WriteMd(fmt.Sprintf("./static/article/draft/%d", user.Id), article.Content)
 				a := models.Article{
 					Id:        tools.NewId(),
@@ -67,10 +66,10 @@ func WriteArticle(c *gin.Context) {
 				}
 				vars.DB0.Table("draft").Create(&a)
 				c.SecureJSON(200, gin.H{
-					"message": false,
+					"message": "The article has been saved",
 				})
-			} else {
-				content := tools.WriteMd(fmt.Sprintf("./static/article/%d", user.Id), article.Content)
+			case "public":
+				content := tools.WriteMd(fmt.Sprintf("./static/article/public/%d", user.Id), article.Content)
 				a := models.Article{
 					Id:        tools.NewId(),
 					Title:     article.Title,
@@ -86,8 +85,10 @@ func WriteArticle(c *gin.Context) {
 				}
 				vars.DB0.Table("article").Create(&a)
 				c.SecureJSON(200, gin.H{
-					"message": true,
+					"message": "The article has been saved",
 				})
+			default:
+				c.SecureJSON(404, nil)
 			}
 		}
 	}
