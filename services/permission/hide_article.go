@@ -1,6 +1,8 @@
 package permission
 
 import (
+	"fmt"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
@@ -27,13 +29,13 @@ func HideArticle(c *gin.Context) {
 		nameCheck := vars.DB0.Table("user").Where(&models.User{Username: hide.Name}, "username").Find(&user).RowsAffected
 		switch {
 		case !user.IsAdmin:
-			c.SecureJSON(200, gin.H{
-				"message": 1028,
+			c.SecureJSON(460, gin.H{
+				"message": "Not authorized to perform this operation",
 			})
 
 		case nameCheck == 0:
-			c.SecureJSON(200, gin.H{
-				"message": 1029,
+			c.SecureJSON(461, gin.H{
+				"message": "User isn't exist",
 			})
 
 		case hide.Name != "":
@@ -49,7 +51,9 @@ func HideArticle(c *gin.Context) {
 					HideArticle:     hide.HideArticle,
 					HideArticleAuth: user.Username,
 				})
-				c.SecureJSON(200, nil)
+				c.SecureJSON(200, gin.H{
+					"message": fmt.Sprintf("User's permission to hide articles has been modified to %t", hide.HideArticle),
+				})
 			} else {
 				permission := models.Permission{
 					UserId:          hide.UserId,
@@ -58,7 +62,9 @@ func HideArticle(c *gin.Context) {
 					HideArticleAuth: user.Username,
 				}
 				vars.DB0.Table("permission").Create(&permission)
-				c.SecureJSON(200, nil)
+				c.SecureJSON(200, gin.H{
+					"message": fmt.Sprintf("User's permission to hide articles has been modified to %t", hide.HideArticle),
+				})
 			}
 		}
 	}
