@@ -14,7 +14,9 @@ import (
 func SigninGuard(c *gin.Context) {
 	value := c.GetHeader("Authorization")
 	if value == "" {
-		c.SecureJSON(452, nil)
+		c.SecureJSON(401, gin.H{
+			"message": "Not signed in to access this page",
+		})
 		return
 	}
 	rows, _ := vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", tools.Parse(value)).Rows()
@@ -25,8 +27,8 @@ func SigninGuard(c *gin.Context) {
 
 		result, _ := vars.RedisToken.Get(context.Background(), strconv.FormatInt(user.Id, 10)).Result()
 		if result != value {
-			c.JSON(200, gin.H{
-				"message": 1001,
+			c.SecureJSON(401, gin.H{
+				"message": "Not signed in to access this page",
 			})
 		} else {
 			c.JSON(200, gin.H{
