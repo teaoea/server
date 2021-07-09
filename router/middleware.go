@@ -25,12 +25,12 @@ func Server() gin.HandlerFunc {
 			c.Next()
 			_, _ = vars.MongoHttp.InsertOne(context.TODO(), bson.D{
 				bson.E{Key: "_id", Value: tools.NewId()},
-				bson.E{Key: "method", Value: c.Request.Method},                       // 请求方式
-				bson.E{Key: "path", Value: c.Request.URL.Path},                       // 请求路径
-				bson.E{Key: "delay", Value: time.Since(start) / 1e6},                 // 延迟
-				bson.E{Key: "status", Value: c.Writer.Status()},                      // 请求状态
-				bson.E{Key: "time", Value: time.Now().Format("2006-01-02 15:04:05")}, // 请求时间
-				bson.E{Key: "ipv4", Value: c.ClientIP()},                             // 客户端ip
+				bson.E{Key: "method", Value: c.Request.Method},
+				bson.E{Key: "path", Value: c.Request.URL.Path},
+				bson.E{Key: "delay", Value: time.Since(start) / 1e6},
+				bson.E{Key: "status", Value: c.Writer.Status()},
+				bson.E{Key: "time", Value: time.Now().Format("2006-01-02 15:04:05")},
+				bson.E{Key: "ipv4", Value: c.ClientIP()},
 			})
 		}
 	}
