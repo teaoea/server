@@ -31,7 +31,9 @@ func Profile(c *gin.Context) {
 		case u.Gender != "":
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("gender", u.Gender)
 
-			c.SecureJSON(200, nil)
+			c.SecureJSON(200, gin.H{
+				"message": "Modify personal information successfully",
+			})
 		}
 	}
 }

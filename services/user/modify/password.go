@@ -34,20 +34,22 @@ func Password(c *gin.Context) {
 		switch {
 
 		case decodePWD != nil || password.Password1 != password.Password2:
-			c.SecureJSON(200, gin.H{
-				"message": 1010,
+			c.SecureJSON(460, gin.H{
+				"message": "Mistake password",
 			})
 
 		case len(password.Password2) < 8 && len(password.Password2) > 16:
-			c.SecureJSON(200, gin.H{
-				"message": 1004,
+			c.SecureJSON(461, gin.H{
+				"message": "The password needs to be greater than 8 digits and less than 32 digits",
 			})
 
 		default:
 			hash, _ := bcrypt.GenerateFromPassword([]byte(password.Password2), bcrypt.DefaultCost) //加密处理
 			encodePWD := string(hash)
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("password", encodePWD)
-			c.SecureJSON(200, nil)
+			c.SecureJSON(200, gin.H{
+				"message": "Modify the password successfully",
+			})
 		}
 	}
 }

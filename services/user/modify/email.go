@@ -29,17 +29,15 @@ func Email(c *gin.Context) {
 
 		affected := vars.DB0.Table("user").Where(&models.User{Email: email.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
-			c.SecureJSON(200, gin.H{
-				"message": 1018,
+			c.SecureJSON(460, gin.H{
+				"message": "Email address is already used",
 			})
 			return
 		}
 
 		if !mail.SuffixCheck(email.Email) {
-			// addr := strings.Split(email.Email, "@") // string segmentation
-			// suffix := "@" + addr[1]                 // intercept email address suffix
-			c.SecureJSON(200, gin.H{
-				"message": 1019,
+			c.SecureJSON(461, gin.H{
+				"message": "The suffix of this email address can't be bound to the account",
 			})
 			return
 		}
@@ -54,6 +52,8 @@ func Email(c *gin.Context) {
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
 		}
 
-		c.SecureJSON(200, nil)
+		c.SecureJSON(200, gin.H{
+			"message": "Modify the email address successfully",
+		})
 	}
 }
