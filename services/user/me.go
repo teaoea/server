@@ -17,7 +17,7 @@ func Me(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 
 		c.SecureJSON(200, gin.H{
-			"name":          user.Username,
+			"username":      user.Username,
 			"email":         user.Email,
 			"email_active":  user.EmailActive,
 			"number":        user.Number,
