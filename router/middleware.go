@@ -52,8 +52,8 @@ func Authorization() gin.HandlerFunc {
 			result, _ := vars.RedisToken.Get(context.Background(), strconv.FormatInt(user.Id, 10)).Result()
 
 			if result != value {
-				c.JSON(200, gin.H{
-					"message": 1001,
+				c.JSON(401, gin.H{
+					"message": "Not signed in to access this page",
 				})
 				return
 			} else {
@@ -99,8 +99,8 @@ func ProxyAuth() gin.HandlerFunc {
 
 		ip := c.ClientIP()
 		if !ipCheck(ip) {
-			c.JSON(200, gin.H{
-				"message": 1002,
+			c.JSON(305, gin.H{
+				"message": "Please use designated proxy access",
 			})
 			return
 		} else {

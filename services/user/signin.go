@@ -26,8 +26,8 @@ func SignIn(c *gin.Context) {
 	nameCheck := vars.DB0.Table("user").Where("username = @signin OR email = @signin", sql.Named("signin", login.Username)).Find(&user).RowsAffected
 
 	if nameCheck == 0 {
-		c.SecureJSON(200, gin.H{
-			"message": 1009,
+		c.SecureJSON(404, gin.H{
+			"message": "Mistake username",
 		})
 		return
 	}
@@ -52,8 +52,8 @@ func SignIn(c *gin.Context) {
 			})
 			return
 		}
-		c.SecureJSON(200, gin.H{
-			"message": 1010,
+		c.SecureJSON(403, gin.H{
+			"message": "Mistake password",
 		})
 	}
 }
