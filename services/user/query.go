@@ -39,13 +39,13 @@ func Query(c *gin.Context) {
 
 	switch {
 	case query.Key == "" || query.Value == "":
-		c.SecureJSON(200, gin.H{
-			"message": 1014,
+		c.SecureJSON(461, gin.H{
+			"message": "Key and value can't be empty",
 		})
 
 	case !check(query.Key):
-		c.SecureJSON(200, gin.H{
-			"message": 1015,
+		c.SecureJSON(462, gin.H{
+			"message": "Can't query this key",
 		})
 
 	default:
@@ -55,7 +55,7 @@ func Query(c *gin.Context) {
 				"message": true,
 			})
 		} else {
-			c.SecureJSON(200, gin.H{
+			c.SecureJSON(203, gin.H{
 				"message": false,
 			})
 		}
