@@ -30,14 +30,16 @@ func Active(c *gin.Context) {
 		value, _ := vars.RedisCode.Get(context.Background(), user.Email).Result()
 
 		if active.Code != value {
-			c.SecureJSON(200, gin.H{
-				"message": 1013,
+			c.SecureJSON(460, gin.H{
+				"message": "Mistake verification code",
 			})
 			return
 		}
 
 		vars.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("email_active", true) // 邮箱激活
 		vars.DB0.Table("user").Model(&models.User{}).Where("email = ?", user.Email).Update("is_active", true)    // 账户激活
-		c.SecureJSON(200, nil)
+		c.SecureJSON(200, gin.H{
+			"message": "Email address activated successfully",
+		})
 	}
 }
