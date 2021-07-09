@@ -24,7 +24,7 @@ func Router() *gin.Engine {
 			accountGroup.POST("/signin", user.SignIn)
 			accountGroup.POST("/query", user.Query)
 			accountGroup.GET("/me", user.Me, Authorization())
-			accountGroup.POST("/logoff", user.Logoff, Authorization())
+			accountGroup.DELETE("/logoff", user.Logoff, Authorization())
 
 			emailGroup := accountGroup.Group("/email", Authorization())
 			{

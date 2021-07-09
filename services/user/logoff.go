@@ -29,8 +29,8 @@ func Logoff(c *gin.Context) {
 		_ = c.ShouldBindJSON(&logoff)
 		value, _ := vars.RedisLogoff.Get(context.TODO(), user.Email).Result()
 		if logoff.Code != value {
-			c.SecureJSON(200, gin.H{
-				"message": 1013,
+			c.SecureJSON(460, gin.H{
+				"message": "Mistake verification code",
 			})
 		} else {
 			// delete account
@@ -45,7 +45,9 @@ func Logoff(c *gin.Context) {
 			vars.DB0.Table("article").Where("author = ?", user.Username).Updates(map[string]interface{}{"author": "account deleted"})
 			vars.DB0.Table("comment").Where("user = ?", user.Username).Updates(map[string]interface{}{"user": "account deleted"})
 			vars.DB0.Table("reply").Where("user = ?", user.Username).Updates(map[string]interface{}{"user": "account deleted"})
-			c.SecureJSON(200, nil)
+			c.SecureJSON(200, gin.H{
+				"message": "Account deleted",
+			})
 		}
 	}
 }
