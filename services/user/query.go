@@ -55,7 +55,7 @@ func Query(c *gin.Context) {
 				"message": true,
 			})
 		} else {
-			c.SecureJSON(203, gin.H{
+			c.SecureJSON(200, gin.H{
 				"message": false,
 			})
 		}
