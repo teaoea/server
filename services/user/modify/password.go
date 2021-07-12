@@ -38,9 +38,9 @@ func Password(c *gin.Context) {
 				"message": "Mistake password",
 			})
 
-		case len(password.Password2) < 8 && len(password.Password2) > 16:
+		case !tools.CheckPassword(password.Password2):
 			c.SecureJSON(461, gin.H{
-				"message": "The password needs to be greater than 8 digits and less than 32 digits",
+				"message": "The password isn't secure enough",
 			})
 
 		default:

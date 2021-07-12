@@ -38,9 +38,9 @@ func SignUp(c *gin.Context) {
 			"message": "The two passwords entered are inconsistent",
 		})
 
-	case len(register.Password2) < 8 || len(register.Password2) > 32:
+	case !tools.CheckPassword(register.Password2):
 		c.SecureJSON(461, gin.H{
-			"message": "The password needs to be greater than 8 digits and less than 32 digits",
+			"message": "The password isn't secure enough",
 		})
 
 	case !mail.SuffixCheck(register.Email):
