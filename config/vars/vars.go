@@ -61,6 +61,14 @@ var (
 		),
 	)
 
+	MongoAngularLogger = config.MongoClient(
+		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
+		c.Mongo.Port[0], "angular-logger", fmt.Sprintf("%d-%d-%d,%d:%d",
+			time.Now().Year(), time.Now().Month(), time.Now().Day(),
+			time.Now().Hour(), time.Now().Minute(),
+		),
+	)
+
 	MongoAngularError = config.MongoClient(
 		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
 		c.Mongo.Port[0], "angular-error", fmt.Sprintf("%d-%d-%d,%d:%d",

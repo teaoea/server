@@ -64,6 +64,7 @@ func Router() *gin.Engine {
 
 		angularGroup := v1.Group("/angular")
 		{
+			angularGroup.POST("/logger", angular.LoggerAngular)
 			angularGroup.POST("/error", angular.Error)
 			angularGroup.GET("/signin_guard", angular.SigninGuard)
 		}
