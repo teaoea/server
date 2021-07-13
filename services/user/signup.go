@@ -31,14 +31,14 @@ func SignUp(c *gin.Context) {
 	numberCheck := vars.DB0.Table("user").Where(&models.User{Number: register.Number}, "number").Find(&user).RowsAffected
 	usernameMatchString, _ := regexp.MatchString("^[a-zA-Z]", register.Username)
 	numberMatchString, _ := regexp.MatchString("^[0-9]", register.Number)
-	passwordMatchString, _ := regexp.MatchString("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,32}", register.Password2)
+
 	switch {
 	case register.Password != register.Password2:
 		c.SecureJSON(460, gin.H{
 			"message": "The two passwords entered are inconsistent",
 		})
 
-	case !passwordMatchString:
+	case !tools.CheckPassword(register.Password2):
 		c.SecureJSON(461, gin.H{
 			"message": "The password isn't secure enough",
 		})
