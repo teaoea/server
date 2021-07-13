@@ -1,6 +1,8 @@
 package modify
 
 import (
+	"regexp"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
@@ -30,7 +32,7 @@ func Password(c *gin.Context) {
 		_ = c.ShouldBindJSON(&password)
 
 		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password.Old))
-
+		passwordMatchString, _ := regexp.MatchString("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,32}", password.Password2)
 		switch {
 
 		case decodePWD != nil || password.Password1 != password.Password2:
@@ -38,7 +40,7 @@ func Password(c *gin.Context) {
 				"message": "Mistake password",
 			})
 
-		case !tools.CheckPassword(password.Password2):
+		case !passwordMatchString:
 			c.SecureJSON(461, gin.H{
 				"message": "The password isn't secure enough",
 			})
