@@ -49,8 +49,8 @@ func NewId() int64 {
 	if timestamp < w.lastTimestamp {
 		admin := c.Mail.Admin[0]
 		subject := "Inaccurate system time"
-		body := "<h2>Inaccurate system time,please synchronize time</h2>"
-		mail.SendMail(admin, subject, body)
+		content := "<h2>Inaccurate system time,please synchronize time</h2>"
+		_ = mail.SendMail(admin, subject, []byte(content))
 		future := time.Now().AddDate(1, 0, 0).UnixNano() / 1e6
 		return future
 	}

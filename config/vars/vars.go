@@ -12,6 +12,7 @@ var (
 	c    = conf.Yaml()
 
 	Addr = c.Addr
+	Home = c.Home
 
 	DB0 = config.PostgresqlClient(
 		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0],
@@ -78,10 +79,4 @@ var (
 	)
 
 	KeyToken = c.Key.Token
-
-	MailForm     = c.Mail.From
-	MailUser     = c.Mail.User
-	MailPassword = c.Mail.Password
-	MailSmtp     = c.Mail.Smtp
-	MailPort     = c.Mail.Port
 )

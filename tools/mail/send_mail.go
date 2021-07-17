@@ -1,56 +1,46 @@
 package mail
 
 import (
-	"crypto/tls"
 	"fmt"
 	"net/smtp"
 	"time"
 
-	"server/config/vars"
+	"server/config"
 
-	"github.com/xhit/go-simple-mail/v2"
+	"github.com/jordan-wright/email"
 )
 
 // SendMail
 //example:
 //	to = "recipient@example.com"
 // 	subject = "subject"
-//	html = <h1>Hello World</h1>
+//	content = []byte("<h1>Hello</h1>")
 //	return @false send failed @true send successfully
-func SendMail(to, subject, html string) bool {
-	e := mail.NewSMTPClient()
-	e.Host = vars.MailSmtp
-	e.Port = vars.MailPort
-	e.Username = vars.MailUser
-	e.Password = vars.MailPassword
-	e.Encryption = mail.EncryptionSTARTTLS
-	e.KeepAlive = false
-	e.ConnectTimeout = time.Second * 10
-	e.SendTimeout = time.Second * 10
-	e.TLSConfig = &tls.Config{InsecureSkipVerify: true}
-	smtpClient, err := e.Connect()
-	if err != nil {
-		return false
-	}
-	send := mail.NewMSG()
-	send.SetFrom(vars.MailForm).
-		AddTo(to).
-		SetSubject(subject).
-		SetBody(mail.TextHTML, html)
-	err = send.Send(smtpClient)
-	return err == nil
-}
+func SendMail(to, subject string, content []byte) error {
+	var (
+		conf config.Config
+		c    = conf.Yaml()
+		ch   <-chan *email.Email
+	)
+	e := email.NewEmail()
+	e.From = c.Mail.From
+	e.To = []string{to}
+	e.Subject = subject
+	e.HTML = content
+	addr := fmt.Sprintf("%s:%d", c.Mail.Smtp, c.Mail.Port)
+	auth := smtp.PlainAuth("", c.Mail.User, c.Mail.Password, c.Mail.Smtp)
 
-func SendMail1(subject, content, to string) (bool, error) {
-	sub := fmt.Sprintf("%s\r\n", subject)
-	form := vars.MailForm
-	contentType := "Content-Type: text/html; charset=UTF-8\r\n\r\n"
-	message := []byte(sub + form + to + contentType + content)
-	addr := fmt.Sprintf("%s:%d", vars.MailSmtp, vars.MailPort)
-	auth := smtp.PlainAuth("", vars.MailUser, vars.MailPassword, vars.MailSmtp)
-	send := smtp.SendMail(addr, auth, form, []string{to}, message)
-	if send != nil {
-		return false, send
+	pool, err := email.NewPool(addr, 4, auth)
+	for i := 0; i < 4; i++ {
+		go func() {
+			for e := range ch {
+				_ = pool.Send(e, 10*time.Second)
+				return
+			}
+		}()
 	}
-	return true, nil
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	Addr       string     `yaml:"addr"`
+	Home       string     `yaml:"home"`
 	Postgresql Postgresql `yaml:"postgresql"`
 	Worker     Worker     `yaml:"worker"`
 	Mail       Mail       `yaml:"mail"`

@@ -60,6 +60,6 @@ key:
     * [gin](https://gin-gonic.com/)
     * [gorm](https://gorm.io/)
     * [go-redis](https://redis.uptrace.dev/)
-    * [go-simple-mail](https://github.com/xhit/go-simple-mail)
+    * [email](https://github.com/jordan-wright/email)
     * [mongo-go-driver](https://github.com/mongodb/mongo-go-driver)
     * [jwt-go](https://github.com/dgrijalva/jwt-go)
