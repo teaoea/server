@@ -2,6 +2,8 @@ package mail
 
 import (
 	"crypto/tls"
+	"fmt"
+	"net/smtp"
 	"time"
 
 	"server/config/vars"
@@ -37,4 +39,18 @@ func SendMail(to, subject, html string) bool {
 		SetBody(mail.TextHTML, html)
 	err = send.Send(smtpClient)
 	return err == nil
+}
+
+func SendMail1(subject, content, to string) (bool, error) {
+	sub := fmt.Sprintf("%s\r\n", subject)
+	form := vars.MailForm
+	contentType := "Content-Type: text/html; charset=UTF-8\r\n\r\n"
+	message := []byte(sub + form + to + contentType + content)
+	addr := fmt.Sprintf("%s:%d", vars.MailSmtp, vars.MailPort)
+	auth := smtp.PlainAuth("", vars.MailUser, vars.MailPassword, vars.MailSmtp)
+	send := smtp.SendMail(addr, auth, form, []string{to}, message)
+	if send != nil {
+		return false, send
+	}
+	return true, nil
 }

@@ -34,8 +34,9 @@ func SendCode(c *gin.Context) {
 				fmt.Sprintf("<h2><strong>%s</strong></h2>", code) +
 				"<h2><strong>The reason you received this email:</strong></h2>" +
 				fmt.Sprintf("<h3>Someone uses this %s email address to register an account with <a href=\"https://www.teaoea.com\"> teaoea </a>. If you have not registered an account, please ignore this email.</h3>\n", user.Email)
-			err := mail.SendMail(to, subject, html)
-			if !err {
+			//err := mail.SendMail(to, subject, html)
+			_, err := mail.SendMail1(subject, html, to)
+			if err != nil {
 				c.SecureJSON(460, gin.H{
 					"message": "Failed to send mail to email address",
 				})
