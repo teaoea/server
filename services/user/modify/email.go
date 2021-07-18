@@ -4,7 +4,6 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
-	"server/tools/mail"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +34,7 @@ func Email(c *gin.Context) {
 			return
 		}
 
-		if !mail.SuffixCheck(email.Email) {
+		if !tools.SuffixCheck(email.Email) {
 			c.SecureJSON(461, gin.H{
 				"message": "The suffix of this email address can't be bound to the account",
 			})

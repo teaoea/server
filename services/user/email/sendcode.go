@@ -8,7 +8,6 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
-	"server/tools/mail"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,20 +24,20 @@ func SendCode(c *gin.Context) {
 		emailCheck := vars.DB0.Table("user").Where(&models.User{Email: user.Email}, "email").Find(&user).RowsAffected
 		switch {
 		case emailCheck == 1:
-			to := user.Email                       //recipient email address
 			subject := "Verify your email address" // email subject
 			code := tools.RandomDig(7)             // verification code
 			// email content, you can use html, verification code use tag with "strong", accessibility service
-			content := []byte(
-				fmt.Sprintf(`
+			content := fmt.Sprintf(`
 <h1>Hello,%s,verify your email address</h1>
 <h3>You use %s to sign in an account. To verify that this email address belongs to you, please enter the verification code below in the verification code input box. The verification code is valid for 5 minutes!!!</h3>
 <h2><strong>%s</strong></h2>
 <h2><strong>The reason you received this email:</strong></h2>
 <h3>Someone uses this %s email address to register an account with <a href="%s"> teaoea </a>. If you have not registered an account, please ignore this email.</h3>
-`, user.Username, user.Email, code, user.Email, vars.Home))
-			err := mail.SendMail(to, subject, content)
-			if err != nil {
+`, user.Username, user.Email, code, user.Email, vars.Home)
+			err := tools.SendMail(
+				user.Username, user.Email, subject, content,
+			)
+			if !err {
 				c.SecureJSON(460, gin.H{
 					"message": "Failed to send mail to email address",
 				})

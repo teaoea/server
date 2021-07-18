@@ -8,7 +8,6 @@ import (
 	"server/config/vars"
 	"server/models"
 	"server/tools"
-	"server/tools/mail"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -43,7 +42,7 @@ func SignUp(c *gin.Context) {
 			"message": "The password isn't secure enough",
 		})
 
-	case !mail.SuffixCheck(register.Email):
+	case !tools.SuffixCheck(register.Email):
 		c.SecureJSON(462, gin.H{
 			"message": "Email address suffix cannot be used for registration",
 		})
