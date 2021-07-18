@@ -34,9 +34,8 @@ func SendCode(c *gin.Context) {
 <h2><strong>The reason you received this email:</strong></h2>
 <h3>Someone uses this %s email address to register an account with <a href="%s"> teaoea </a>. If you have not registered an account, please ignore this email.</h3>
 `, user.Username, user.Email, code, user.Email, vars.Home)
-			err := tools.SendMail(
-				user.Username, user.Email, subject, content,
-			)
+			err := tools.SendMail(user.Email, subject, content)
+
 			if !err {
 				c.SecureJSON(460, gin.H{
 					"message": "Failed to send mail to email address",

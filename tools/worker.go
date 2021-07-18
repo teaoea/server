@@ -49,7 +49,7 @@ func NewId() int64 {
 		admin := c.Mail.Admin[0]
 		subject := "Inaccurate system time"
 		content := "<h2>Inaccurate system time,please synchronize time</h2>"
-		_ = SendMail("", admin, subject, content)
+		_ = SendMail(admin, subject, content)
 		future := time.Now().AddDate(1, 0, 0).UnixNano() / 1e6
 		return future
 	}

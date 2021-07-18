@@ -17,14 +17,14 @@ import (
 // 	subject = "subject"
 //	content = "<h1>Hello</h1>"
 //	return @false send failed @true send successfully
-func SendMail(name, recipient, sub, content string) bool {
+func SendMail(recipient, sub, content string) bool {
 	var (
 		conf config.Config
 		c    = conf.Yaml()
 	)
 
 	from := mail.Address{Name: c.Mail.From, Address: c.Mail.User} // sender
-	to := mail.Address{Name: name, Address: recipient}            // recipient
+	to := mail.Address{Name: "", Address: recipient}              // recipient
 	headers := make(map[string]string)
 	headers["From"] = from.String()
 	headers["To"] = to.String()
@@ -84,10 +84,6 @@ func SendMail(name, recipient, sub, content string) bool {
 		return false
 	}
 
-	err = client.Quit()
-	if err != nil {
-		Err("tools/mail/send_mail.go->client.Quit", err)
-		return false
-	}
+	_ = client.Quit()
 	return true
 }
