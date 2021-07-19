@@ -22,7 +22,6 @@ func WriteArticle(c *gin.Context) {
 			category models.Category
 			article  struct {
 				models.Article
-				Save string `json:"save"`
 			}
 		)
 
@@ -48,9 +47,8 @@ func WriteArticle(c *gin.Context) {
 				"message": "The category isn't exist",
 			})
 		default:
-			switch article.Save {
-			case "draft":
-				content := tools.WriteMd(fmt.Sprintf("./static/article/draft/%d", user.Id), article.Content)
+			if article.Show {
+				content := tools.WriteMd(fmt.Sprintf("./static/article/public/%d", user.Id), article.Content)
 				a := models.Article{
 					Id:        tools.NewId(),
 					Title:     article.Title,
@@ -66,10 +64,10 @@ func WriteArticle(c *gin.Context) {
 				}
 				vars.DB0.Table("draft").Create(&a)
 				c.SecureJSON(200, gin.H{
-					"message": "The article has been saved",
+					"message": "The article has been published",
 				})
-			case "public":
-				content := tools.WriteMd(fmt.Sprintf("./static/article/public/%d", user.Id), article.Content)
+			} else {
+				content := tools.WriteMd(fmt.Sprintf("./static/article/private/%d", user.Id), article.Content)
 				a := models.Article{
 					Id:        tools.NewId(),
 					Title:     article.Title,
@@ -87,8 +85,6 @@ func WriteArticle(c *gin.Context) {
 				c.SecureJSON(200, gin.H{
 					"message": "The article has been saved",
 				})
-			default:
-				c.SecureJSON(404, nil)
 			}
 		}
 	}
