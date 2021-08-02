@@ -1,6 +1,8 @@
 package modify
 
 import (
+	"context"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
@@ -10,7 +12,7 @@ import (
 )
 
 type modifyPassword struct {
-	Old       string `json:"old"`
+	Code      string `json:"Code"`
 	Password1 string `json:"password1"`
 	Password2 string `json:"password2"`
 }
@@ -29,27 +31,26 @@ func Password(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&password)
 
-		decodePWD := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password.Old))
-
-		switch {
-
-		case decodePWD != nil || password.Password1 != password.Password2:
+		value, _ := vars.RedisPasswordCode.Get(context.Background(), user.Email).Result()
+		if password.Code != value {
 			c.SecureJSON(460, gin.H{
-				"message": "Mistake password",
+				"message": "Mistake verification code",
 			})
+			return
+		}
 
-		case !tools.CheckPassword(password.Password2):
+		if !tools.CheckPassword(password.Password2) {
 			c.SecureJSON(461, gin.H{
 				"message": "The password isn't secure enough",
 			})
-
-		default:
-			hash, _ := bcrypt.GenerateFromPassword([]byte(password.Password2), bcrypt.DefaultCost) //加密处理
-			encodePWD := string(hash)
-			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("password", encodePWD)
-			c.SecureJSON(200, gin.H{
-				"message": "Modify the password successfully",
-			})
+			return
 		}
+
+		hash, _ := bcrypt.GenerateFromPassword([]byte(password.Password2), bcrypt.DefaultCost) //加密处理
+		encodePWD := string(hash)
+		vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("password", encodePWD)
+		c.SecureJSON(200, gin.H{
+			"message": "Modify the password successfully",
+		})
 	}
 }

@@ -1,6 +1,8 @@
 package modify
 
 import (
+	"context"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
@@ -9,6 +11,7 @@ import (
 )
 
 type modifyEmail struct {
+	Code  string `json:"code"`
 	Email string `json:"email"`
 }
 
@@ -25,6 +28,14 @@ func Email(c *gin.Context) {
 
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.BindJSON(&email)
+
+		value, _ := vars.RedisEmailCode.Get(context.Background(), user.Email).Result()
+		if email.Code != value {
+			c.SecureJSON(460, gin.H{
+				"message": "Mistake verification code",
+			})
+			return
+		}
 
 		affected := vars.DB0.Table("user").Where(&models.User{Email: email.Email}, "email").Find(&user).RowsAffected
 		if affected != 0 {
