@@ -27,7 +27,7 @@ func Active(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 		_ = c.ShouldBindJSON(&active)
 
-		value, _ := vars.RedisCode.Get(context.Background(), user.Email).Result()
+		value, _ := vars.RedisAuthCode.Get(context.Background(), user.Email).Result()
 
 		if active.Code != value {
 			c.SecureJSON(460, gin.H{
