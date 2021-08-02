@@ -19,16 +19,24 @@ var (
 		c.Postgresql.Port[0], c.Postgresql.Name[0],
 	)
 
-	RedisCode = config.RedisClient(
+	RedisToken = config.RedisClient(
 		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 0,
 	)
 
-	RedisToken = config.RedisClient(
+	RedisLogoff = config.RedisClient(
 		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 1,
 	)
 
-	RedisLogoff = config.RedisClient(
+	RedisAuthCode = config.RedisClient(
 		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 2,
+	)
+
+	RedisPasswordCode = config.RedisClient(
+		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 3,
+	)
+
+	RedisEmailCode = config.RedisClient(
+		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 4,
 	)
 
 	MongoSuffix = config.MongoClient(
