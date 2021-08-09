@@ -19,7 +19,7 @@ var (
 
 	Query = c.Query
 
-	//EmailSuffixes = c.Mail.Suffixes
+	EmailSuffixes = c.Mail.Suffixes
 
 	DB0 = config.PostgresqlClient(
 		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0], c.Postgresql.Port[0], c.Postgresql.Name[0],
