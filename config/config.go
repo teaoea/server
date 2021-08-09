@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Addr       string     `yaml:"addr"`
 	Home       string     `yaml:"home"`
+	Query      []string   `yaml:"query"`
 	Postgresql Postgresql `yaml:"postgresql"`
 	Worker     Worker     `yaml:"worker"`
 	Mail       Mail       `yaml:"mail"`
@@ -40,6 +41,7 @@ type Mail struct {
 	Admin    []string `yaml:"admin"`
 	Smtp     string   `yaml:"smtp"`
 	Port     int      `yaml:"port"`
+	Suffixes []string `yaml:"suffixes"`
 }
 
 type Mongo struct {

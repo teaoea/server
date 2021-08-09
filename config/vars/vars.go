@@ -12,11 +12,17 @@ var (
 	c    = conf.Yaml()
 
 	Addr = c.Addr
+
 	Home = c.Home
 
+	KeyToken = c.Key.Token
+
+	Query = c.Query
+
+	//EmailSuffixes = c.Mail.Suffixes
+
 	DB0 = config.PostgresqlClient(
-		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0],
-		c.Postgresql.Port[0], c.Postgresql.Name[0],
+		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0], c.Postgresql.Port[0], c.Postgresql.Name[0],
 	)
 
 	RedisToken = config.RedisClient(
@@ -39,19 +45,9 @@ var (
 		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 4,
 	)
 
-	MongoSuffix = config.MongoClient(
-		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
-		c.Mongo.Port[0], "conf", "suffixes",
-	)
-
 	MongoIpaddr = config.MongoClient(
 		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
 		c.Mongo.Port[0], "conf", "ipaddr",
-	)
-
-	MongoQuery = config.MongoClient(
-		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
-		c.Mongo.Port[0], "conf", "query",
 	)
 
 	MongoHttp = config.MongoClient(
@@ -85,6 +81,4 @@ var (
 			time.Now().Hour(), time.Now().Minute(),
 		),
 	)
-
-	KeyToken = c.Key.Token
 )
