@@ -21,6 +21,8 @@ var (
 
 	EmailSuffixes = c.Mail.Suffixes
 
+	Ip = c.Ip
+
 	DB0 = config.PostgresqlClient(
 		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0], c.Postgresql.Port[0], c.Postgresql.Name[0],
 	)
@@ -43,11 +45,6 @@ var (
 
 	RedisEmailCode = config.RedisClient(
 		c.Redis.Host[0], c.Redis.Port[0], c.Redis.Password[0], 4,
-	)
-
-	MongoIpaddr = config.MongoClient(
-		c.Mongo.User[0], c.Mongo.Password[0], c.Mongo.Host[0],
-		c.Mongo.Port[0], "conf", "ipaddr",
 	)
 
 	MongoHttp = config.MongoClient(

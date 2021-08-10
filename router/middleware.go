@@ -11,7 +11,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Server
@@ -83,13 +82,12 @@ func Cor() gin.HandlerFunc {
 }
 
 func ipCheck(ip string) bool {
-	var ipaddr struct{}
-
-	filter := bson.D{
-		bson.E{Key: "ip", Value: ip},
+	for _, value := range vars.Ip {
+		if ip == value {
+			return true
+		}
 	}
-	val := vars.MongoIpaddr.FindOne(context.TODO(), filter).Decode(&ipaddr)
-	return val != mongo.ErrNoDocuments
+	return false
 }
 
 // ProxyAuth

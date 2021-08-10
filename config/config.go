@@ -10,6 +10,7 @@ type Config struct {
 	Addr       string     `yaml:"addr"`
 	Home       string     `yaml:"home"`
 	Query      []string   `yaml:"query"`
+	Ip         []string   `yaml:"ip"`
 	Postgresql Postgresql `yaml:"postgresql"`
 	Worker     Worker     `yaml:"worker"`
 	Mail       Mail       `yaml:"mail"`
