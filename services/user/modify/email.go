@@ -58,7 +58,7 @@ func Email(c *gin.Context) {
 		vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("email_active", false)
 		// if the phone number isn't activated,
 		// modify account status to not activated
-		if !user.NumberActive {
+		if !user.PhoneActive {
 			vars.DB0.Table("user").Model(&models.User{}).Where("id = ?", user.Id).Update("is_active", false)
 		}
 

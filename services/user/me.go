@@ -1,6 +1,8 @@
 package user
 
 import (
+	"fmt"
+
 	"server/config/vars"
 	"server/models"
 	"server/tools"
@@ -17,13 +19,13 @@ func Me(c *gin.Context) {
 		_ = vars.DB0.ScanRows(rows, &user)
 
 		c.SecureJSON(200, gin.H{
-			"username":      user.Username,
-			"email":         user.Email,
-			"email_active":  user.EmailActive,
-			"number":        user.Number,
-			"number_active": user.NumberActive,
-			"avatar":        user.Avatar,
-			"gender":        user.Gender,
+			"username":     user.Username,
+			"email":        user.Email,
+			"email_active": user.EmailActive,
+			"phone":        fmt.Sprintf("%s-%s", user.Prefix, user.Phone),
+			"phone_active": user.PhoneActive,
+			"avatar":       user.Avatar,
+			"gender":       user.Gender,
 		})
 	}
 }
