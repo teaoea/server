@@ -7,10 +7,7 @@ import (
 )
 
 type Config struct {
-	Addr       string     `yaml:"addr"`
-	Home       string     `yaml:"home"`
-	Query      []string   `yaml:"query"`
-	Ip         []string   `yaml:"ip"`
+	Support    Support    `yaml:"support"`
 	Postgresql Postgresql `yaml:"postgresql"`
 	Worker     Worker     `yaml:"worker"`
 	Mail       Mail       `yaml:"mail"`
@@ -18,6 +15,15 @@ type Config struct {
 	Redis      Redis      `yaml:"redis"`
 	Key        Key        `yaml:"key"`
 	MobTech    MobTech    `yaml:"mob_tech"`
+}
+
+type Support struct {
+	Addr     string   `yaml:"addr"`     // start port
+	Home     string   `yaml:"home"`     // website homepage
+	Query    []string `yaml:"query"`    // Table fields allowed to be queried
+	Ip       []string `yaml:"ip"`       // allowed ip
+	Suffixes []string `yaml:"suffixes"` // email suffixes allowed to sign up
+	Admin    []string `yaml:"admin"`    // admin email address
 }
 
 type Postgresql struct {
@@ -36,13 +42,11 @@ type Worker struct {
 }
 
 type Mail struct {
-	From     string   `yaml:"from"`
-	User     string   `yaml:"user"`
-	Password string   `yaml:"password"`
-	Admin    []string `yaml:"admin"`
-	Smtp     string   `yaml:"smtp"`
-	Port     int      `yaml:"port"`
-	Suffixes []string `yaml:"suffixes"`
+	From     string `yaml:"from"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Smtp     string `yaml:"smtp"`
+	Port     int    `yaml:"port"`
 }
 
 type Mongo struct {

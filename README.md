@@ -3,18 +3,14 @@
 1. create the file `config.yaml` in the root directory
 
 ```yaml
-# start port :1234
-addr: * # port
-
-# website homepage
-home: https://example.com
-
-# table fields allowed to be queried
-query: [ username,email,number ]
-
-# allowed ip
-ip: [ 127.0.0.1,172.18.0.1 ]
-
+support:
+  addr: * # start port
+  home: https://example.com # website homepage
+  query: [ username,email,number ] # table fields allowed to be queried
+  ip: [ 127.0.0.1,172.18.0.1 ] # allowed ip
+  suffixes: [ ] # email suffixes allowed to sign up
+  admin: [ ] # admin email address
+  
 postgresql:
   user: [ ]
   password: [ ]
@@ -46,25 +42,6 @@ mail:
   password: *
   smtp: *
   post: *
-  # service error, send mail to admin
-  admin: [ ]
-  # email suffixes allowed to sign up
-  suffixes: [
-      @gmail.com,
-      @outlook.com,
-      @yahoo.com,
-      @googlemail.com,
-      @live.com,
-      @icould.com,
-      @mail.com,
-      @email.com,
-      @ask.com,
-      @msn.com,
-      @163.com,
-      @126.com,
-      @qq.com,
-      @hotmail.com
-  ]
 
 key:
   # the key to encrypt the token

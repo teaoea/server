@@ -11,17 +11,17 @@ var (
 	conf config.Config
 	c    = conf.Yaml()
 
-	Addr = c.Addr
+	Addr = c.Support.Addr
 
-	Home = c.Home
+	Home = c.Support.Home
 
 	KeyToken = c.Key.Token
 
-	Query = c.Query
+	Query = c.Support.Query
 
-	EmailSuffixes = c.Mail.Suffixes
+	EmailSuffixes = c.Support.Suffixes
 
-	Ip = c.Ip
+	Ip = c.Support.Ip
 
 	DB0 = config.PostgresqlClient(
 		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0], c.Postgresql.Port[0], c.Postgresql.Name[0],
