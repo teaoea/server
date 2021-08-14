@@ -37,7 +37,7 @@ func SendMail(recipient, sub, content string) bool {
 	}
 	message += "\r\n" + content
 
-	server := fmt.Sprintf("%s:%d", c.Mail.Smtp, c.Mail.Port)
+	server := fmt.Sprintf("%s:%s", c.Mail.Smtp, c.Mail.Port)
 	host, _, _ := net.SplitHostPort(server)
 	auth := smtp.PlainAuth("", c.Mail.User, c.Mail.Password, host)
 
