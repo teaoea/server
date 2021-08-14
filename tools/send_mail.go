@@ -8,6 +8,7 @@ import (
 	"net/smtp"
 
 	"server/config"
+	"server/config/vars"
 )
 
 // SendMail
@@ -86,4 +87,10 @@ func SendMail(recipient, sub, content string) bool {
 
 	_ = client.Quit()
 	return true
+}
+
+func SendAdmin(subject, content string) {
+	for i := 0; i < len(vars.Admin); i++ {
+		SendMail(vars.Admin[i], subject, content)
+	}
 }

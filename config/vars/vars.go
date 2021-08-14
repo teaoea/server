@@ -21,6 +21,8 @@ var (
 
 	EmailSuffixes = c.Support.Suffixes
 
+	Admin = c.Support.Admin
+
 	Ip = c.Support.Ip
 
 	DB0 = config.PostgresqlClient(
