@@ -46,11 +46,21 @@ func NewId() int64 {
 	w.Lock()
 	timestamp := time.Now().UnixNano() / 1e6
 	if timestamp < w.lastTimestamp {
-		subject := "Inaccurate system time"
-		content := "<h2>Inaccurate system time,please synchronize time</h2>"
+		subject := "Inaccurate system time,level:0"
+		content := `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body style="font-family: sans-serif">
+<h1 style="text-align: center">Inaccurate system time,level:0</h1>
+<h2 style="text-align: left"><strong>Inaccurate system time,please synchronize time</strong></h2>
+</body>
+</html>
+`
 		SendAdmin(subject, content)
-		future := time.Now().AddDate(1, 0, 0).UnixNano() / 1e6
-		return future
+		panic("Inaccurate system time")
 	}
 	if timestamp == w.lastTimestamp {
 		w.sequence = (w.sequence + 1) & sequenceMax
