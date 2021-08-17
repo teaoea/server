@@ -1,52 +1,55 @@
 ## Start
 
-1. create the file `config.yaml` in the root directory
+1. create the file `config.json` in the root directory
 
-```yaml
-support:
-  addr: * # start port
-  home: https://example.com # website homepage
-  query: [ username,email,number ] # table fields allowed to be queried
-  ip: [ 127.0.0.1,172.18.0.1 ] # allowed ip
-  suffixes: [ ] # email suffixes allowed to sign up
-  admin: [ ] # admin email address
-  
-postgresql:
-  user: [ ]
-  password: [ ]
-  host: [ ]
-  port: [ ]
-  name: [ ]
-
-mongo:
-  user: [ ]
-  password: [ ]
-  host: [ ]
-  port: [ ]
-
-redis:
-  host: [ ]
-  port: [ ]
-  password: [ ]
-
-worker:
-  workerId: 1
-  centerId: 1
-  sequence: 0
-  # timestamp
-  epoch: 1609430400000
-
-mail:
-  user: *
-  from: *
-  password: *
-  smtp: *
-  post: *
-
-key:
-  # the key to encrypt the token
-  token:
-
+```json5
+{
+  "support": {
+    "addr": "",
+    "home": "",
+    "query": [
+    ],
+    "ip": [
+    ],
+    "suffixes": [
+    ],
+    "admin": []
+  },
+  "postgresql": {
+    "user": [],
+    "password": [],
+    "host": [],
+    "port": [],
+    "name": []
+  },
+  "worker": {
+    "workerId": 1,
+    "centerId": 1,
+    "sequence": 0,
+    "epoch": 1609430400000
+  },
+  "mongo": {
+    "user": [],
+    "password": [],
+    "host": [],
+    "port": []
+  },
+  "redis": {
+    "host": [],
+    "port": [],
+    "password": []
+  },
+  "mail": {
+    "user": "",
+    "from": "",
+    "password": "",
+    "smtp": "",
+    "port": ""
+  },
+  "key": {
+    "token": ""
+  }
+}
 ```
 
 2. postgres
