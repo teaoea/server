@@ -28,7 +28,7 @@ func PostgresqlClient(user, password, host, port, name string) *gorm.DB {
 	sqlDB, _ := pgc.DB()
 	err := sqlDB.Ping()
 	if err != nil {
-		panic("postgresql connection failed,check the configuration file \"config.yaml\"")
+		panic("postgresql connection failed,check the configuration file \"config.json\"")
 	}
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
@@ -44,7 +44,7 @@ func RedisClient(host, port, password string, DB int) *redis.Client {
 	})
 	_, err := rdb.Ping(context.TODO()).Result()
 	if err != nil {
-		panic("redis connection failed,check the configuration file \"config.yaml\"")
+		panic("redis connection failed,check the configuration file \"config.json\"")
 	}
 	return rdb
 }
@@ -60,7 +60,7 @@ func MongoClient(user, password, host, port, database, collection string) *mongo
 		SetMinPoolSize(5))
 	err := mgc.Ping(ctx, nil)
 	if err != nil {
-		panic("mongo connection failed,check the configuration file \"config.yaml\"")
+		panic("mongo connection failed,check the configuration file \"config.json\"")
 	}
 	coll := mgc.Database(database).Collection(collection)
 	return coll
