@@ -9,7 +9,7 @@ import (
 
 var (
 	conf config.Config
-	c    = conf.Yaml()
+	c    = conf.Conf()
 
 	Addr = c.Support.Addr
 
@@ -26,7 +26,8 @@ var (
 	Ip = c.Support.Ip
 
 	DB0 = config.PostgresqlClient(
-		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0], c.Postgresql.Port[0], c.Postgresql.Name[0],
+		c.Postgresql.User[0], c.Postgresql.Password[0], c.Postgresql.Host[0],
+		c.Postgresql.Port[0], c.Postgresql.Name[0],
 	)
 
 	RedisToken = config.RedisClient(

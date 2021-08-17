@@ -9,7 +9,7 @@ import (
 
 var (
 	conf     config.Config
-	c        = conf.Yaml()
+	c        = conf.Conf()
 	workerId = c.Worker.WorkerId
 	centerId = c.Worker.CenterId
 	sequence = c.Worker.Sequence

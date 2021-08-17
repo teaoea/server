@@ -1,82 +1,79 @@
 package config
 
 import (
+	"encoding/json"
 	"os"
-
-	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Support    Support    `yaml:"support"`
-	Postgresql Postgresql `yaml:"postgresql"`
-	Worker     Worker     `yaml:"worker"`
-	Mail       Mail       `yaml:"mail"`
-	Mongo      Mongo      `yaml:"mongo"`
-	Redis      Redis      `yaml:"redis"`
-	Key        Key        `yaml:"key"`
-	MobTech    MobTech    `yaml:"mob_tech"`
+	Support    Support    `json:"support"`
+	Postgresql Postgresql `json:"postgresql"`
+	Worker     Worker     `json:"worker"`
+	Mail       Mail       `json:"mail"`
+	Mongo      Mongo      `json:"mongo"`
+	Redis      Redis      `json:"redis"`
+	Key        Key        `json:"key"`
 }
 
 type Support struct {
-	Addr     string   `yaml:"addr"`     // start port
-	Home     string   `yaml:"home"`     // website homepage
-	Query    []string `yaml:"query"`    // Table fields allowed to be queried
-	Ip       []string `yaml:"ip"`       // allowed ip
-	Suffixes []string `yaml:"suffixes"` // email suffixes allowed to sign up
-	Admin    []string `yaml:"admin"`    // admin email address
+	Addr     string   `json:"addr"`     // start port
+	Home     string   `json:"home"`     // website homepage
+	Query    []string `json:"query"`    // Table fields allowed to be queried
+	Ip       []string `json:"ip"`       // allowed ip
+	Suffixes []string `json:"suffixes"` // email suffixes allowed to sign up
+	Admin    []string `json:"admin"`    // admin email address
 }
 
 type Postgresql struct {
-	User     []string `yaml:"user"`
-	Password []string `yaml:"password"`
-	Host     []string `yaml:"host"`
-	Port     []string `yaml:"port"`
-	Name     []string `yaml:"name"`
-}
-
-type Worker struct {
-	WorkerId int64 `yaml:"workerId"`
-	CenterId int64 `yaml:"centerId"`
-	Sequence int64 `yaml:"sequence"`
-	Epoch    int64 `yaml:"epoch"`
-}
-
-type Mail struct {
-	From     string `yaml:"from"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Smtp     string `yaml:"smtp"`
-	Port     int    `yaml:"port"`
+	User     []string `json:"user"`
+	Password []string `json:"password"`
+	Host     []string `json:"host"`
+	Port     []string `json:"port"`
+	Name     []string `json:"name"`
 }
 
 type Mongo struct {
-	User     []string `yaml:"user"`
-	Password []string `yaml:"password"`
-	Host     []string `yaml:"host"`
-	Port     []string `yaml:"port"`
+	User     []string `json:"user"`
+	Password []string `json:"password"`
+	Host     []string `json:"host"`
+	Port     []string `json:"port"`
 }
 
 type Redis struct {
-	Host     []string `yaml:"host"`
-	Port     []string `yaml:"port"`
-	Password []string `yaml:"password"`
+	Host     []string `json:"host"`
+	Port     []string `json:"port"`
+	Password []string `json:"password"`
+}
+
+type Worker struct {
+	WorkerId int64 `json:"worker_id"`
+	CenterId int64 `json:"center_id"`
+	Sequence int64 `json:"sequence"`
+	Epoch    int64 `json:"epoch"`
+}
+
+type Mail struct {
+	From     string `json:"from"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Smtp     string `json:"smtp"`
+	Port     string `json:"port"`
 }
 
 type Key struct {
-	Token      []byte `yaml:"token"`
-	PrivateKey string `yaml:"privateKey"`
-	PublicKey  string `yaml:"publicKey"`
+	Token      string `json:"token"`
+	PrivateKey string `json:"private_key"`
+	PublicKey  string `json:"public_key"`
 }
 
-type MobTech struct {
-	Key    string `yaml:"key"`
-	Secret string `yaml:"secret"`
-}
-
-func (config *Config) Yaml() *Config {
-	filename, _ := os.ReadFile("./config.yaml")
-
-	_ = yaml.Unmarshal(filename, config)
-
+func (config *Config) Conf() *Config {
+	file, err := os.ReadFile("./config.json")
+	if err != nil {
+		panic(err)
+	}
+	err = json.Unmarshal(file, config)
+	if err != nil {
+		panic(err)
+	}
 	return config
 }
