@@ -25,7 +25,7 @@ func SignUp(c *gin.Context) {
 
 	nameCheck := vars.DB0.Table("user").Where(&models.User{Username: signup.Username}, "username").Find(&user).RowsAffected
 	emailCheck := vars.DB0.Table("user").Where(&models.User{Email: signup.Email}, "email").Find(&user).RowsAffected
-	numberCheck := vars.DB0.Table("user").Where(&models.User{Phone: signup.Phone}, "number").Find(&user).RowsAffected
+	phoneCheck := vars.DB0.Table("user").Where(&models.User{Phone: signup.Phone}, "phone").Find(&user).RowsAffected
 	usernameMatchString, _ := regexp.MatchString("^[a-zA-Z]", signup.Username)
 	numberMatchString, _ := regexp.MatchString("^[0-9]", signup.Phone)
 
@@ -42,7 +42,7 @@ func SignUp(c *gin.Context) {
 
 	case !tools.SuffixCheck(signup.Email):
 		c.SecureJSON(462, gin.H{
-			"message": "Email address suffix cannot be used for registration",
+			"message": "Email address suffix can't be used for sign up",
 		})
 
 	case nameCheck != 0 || signup.Username == "":
@@ -60,7 +60,7 @@ func SignUp(c *gin.Context) {
 			"message": "Email address has been signed up",
 		})
 
-	case numberCheck != 0 || signup.Phone == "":
+	case phoneCheck != 0 || signup.Phone == "":
 		c.SecureJSON(466, gin.H{
 			"message": "Phone number has been signed up",
 		})
