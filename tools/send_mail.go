@@ -21,7 +21,7 @@ import (
 func SendMail(recipient, sub, content string) bool {
 	var (
 		conf config.Config
-		c    = conf.Conf()
+		c    = conf.Get()
 	)
 
 	from := mail.Address{Name: c.Mail.From, Address: c.Mail.User} // sender

@@ -66,7 +66,7 @@ type Key struct {
 	PublicKey  string `json:"public_key"`
 }
 
-func (config *Config) Conf() *Config {
+func (config *Config) Get() *Config {
 	file, err := os.ReadFile("./config.json")
 	if err != nil {
 		panic(err)

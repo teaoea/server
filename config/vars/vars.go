@@ -9,7 +9,7 @@ import (
 
 var (
 	conf config.Config
-	c    = conf.Conf()
+	c    = conf.Get()
 
 	Addr = c.Support.Addr
 
