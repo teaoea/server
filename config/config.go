@@ -16,6 +16,7 @@ type Config struct {
 }
 
 type Support struct {
+	Security int      `json:"security"`
 	Addr     string   `json:"addr"`     // start port
 	Home     string   `json:"home"`     // website homepage
 	Query    []string `json:"query"`    // Table fields allowed to be queried
@@ -76,4 +77,24 @@ func (config *Config) Get() *Config {
 		panic(err)
 	}
 	return config
+}
+
+func (config *Config) Set(s Support) (bool, error) {
+	file, err := os.ReadFile("./config.json")
+	if err != nil {
+		return false, err
+	}
+	err = json.Unmarshal(file, &s)
+	if err != nil {
+		return false, err
+	}
+	value, err := json.Marshal(s)
+	if err != nil {
+		return false, err
+	}
+	_, err = os.Stdout.Write(value)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
